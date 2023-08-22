@@ -74,7 +74,7 @@ def get_user(request: FilterRequestSchema, typeuser: str = "all", school_id: str
 
 @router_user.get("/{user_id}", response_model=UserRequestOutSchema)
 def get_by_user_id(user_id: str,  db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
-    _user = db.query(User).options(joinedload(User.branch_user), joinedload(User.school_user)).filter(
+    _user = db.query(User).filter(
         User.user_id == user_id, User.cancelled == 1).one_or_none()
     if not _user:
         raise HTTPException(status_code=404, detail="Data not found")
