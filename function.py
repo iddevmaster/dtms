@@ -3,6 +3,7 @@ import os
 import random
 import string
 import uuid
+from pytz import timezone as tz
 from datetime import date, datetime, timedelta, timezone
 
 from dateutil.relativedelta import relativedelta
@@ -71,7 +72,9 @@ def plusSecond(time, value):
 
 
 def today():
-    return date.today()
+    time_format = '%Y-%m-%d'
+    date = datetime.now(tz('Asia/Bangkok')).strftime(time_format)
+    return date
 
 
 def ymdtodmy(date):
@@ -114,7 +117,10 @@ def time_difference(starttime, endtime):
 
 
 def todaytime():
-    return datetime.now()
+    # time_format = '%Y-%m-%d %H:%M:%S %Z%z'
+    time_format = '%Y-%m-%d %H:%M:%S'
+    dateTime = datetime.now(tz('Asia/Bangkok')).strftime(time_format)
+    return dateTime
 
 
 def generateId():
