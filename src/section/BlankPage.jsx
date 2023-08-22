@@ -5,8 +5,8 @@ export default class BlankPage extends Component {
     return (
       <div>
         <div align="center" style={{ padding: "150px" }}>
-          <h1>DMS</h1>
-          <h3>ระบบบริหารโรงเรียนสอนขับรถ</h3>
+          <h1>DTMS</h1>
+          <h3>ระบบบริหารการจัดการศูนย์สอนขับรถขั้นพื้นฐาน</h3>
         </div>
       </div>
     );
