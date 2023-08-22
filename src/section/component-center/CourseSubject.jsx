@@ -10,7 +10,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Common from "../../common";
 import axios from "axios";
 import Loading_2 from "../../asset/images/Loading_2.gif";
-
+import Functions from "../../functions";
 const CourseSubjectList = React.lazy(() => import("./CourseSubjectList"));
 const CourseSubjectTheory = React.lazy(() => import("./CourseSubjectTheory"));
 const CourseSubjectPractice = React.lazy(() =>
@@ -25,7 +25,7 @@ const GetDataForm = () => {
 export default GetDataForm;
 class CourseSubject extends Component {
   state = {
-    course_id: this.props.course_id,
+    course_id: "",
     data: [],
     course_name: "",
     isOpenModal: false,
@@ -33,9 +33,10 @@ class CourseSubject extends Component {
   };
 
   refreshData = async () => {
+    let course_id = this.props.course_id;
     try {
       await axios
-        .get(Common.API_URL + `course/${this.state.course_id}`, Common.options)
+        .get(Common.API_URL + `course/${course_id}`, Common.options)
         .then((response) => {
           let res = response.data;
           this.setState({ data: res, course_name: res.course_name });
@@ -46,14 +47,12 @@ class CourseSubject extends Component {
     }
   };
   setCourseReady = async () => {
+    let course_id = this.props.course_id;
     try {
       await axios
-        .get(
-          Common.API_URL + `course/s/${this.state.course_id}`,
-          Common.options
-        )
+        .get(Common.API_URL + `course/s/${course_id}`, Common.options)
         .then((response) => {
-          window.location = "/course/subject/" + this.state.course_id;
+          window.location = "/course/subject/" + course_id;
         });
     } catch (error) {
       // console.log(error);
@@ -70,10 +69,7 @@ class CourseSubject extends Component {
   }
 
   render() {
-    const { data } = this.state;
-    const { course_name } = this.state;
-    const { isOpenModal } = this.state;
-    const { msg } = this.state;
+    const { data, course_name, isOpenModal, msg } = this.state;
     const course_readey = data.course_readey;
     return (
       <div>
@@ -108,7 +104,8 @@ class CourseSubject extends Component {
           </Row>
           <div>
             <h5>
-              ประเภทยานพาหนะ : {data.join_vehicle_type_id} | ทฤษฏี :{" "}
+              ประเภทยานพาหนะ :{" "}
+              {Functions.vehicle_type_format(data.vehicle_type_id)} | ทฤษฏี :{" "}
               {data.course_theory_hour} ชั่วโมง | ปฏิบัติ :{" "}
               {data.course_practice_hour} ชั่วโมง
             </h5>

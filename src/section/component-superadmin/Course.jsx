@@ -1,17 +1,19 @@
 import React, { Component } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Modal from "react-bootstrap/Modal";
-import Table from "react-bootstrap/Table";
-import Alert from "react-bootstrap/Alert";
+import {
+  Row,
+  Col,
+  Breadcrumb,
+  Card,
+  Button,
+  ButtonGroup,
+  Dropdown,
+  DropdownButton,
+  Form,
+  InputGroup,
+  Modal,
+  Table,
+  Alert,
+} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Functions from "../../functions";
 import Common from "../../common";
