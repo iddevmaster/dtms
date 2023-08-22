@@ -1,9 +1,13 @@
 from sqlalchemy import (Boolean, Column, Date, DateTime, Float, ForeignKey,
                         Integer, String, Time)
 from sqlalchemy.orm import relationship
-
+from typing import Any
 from database import Base
 from function import generateId, generateShortId
+
+from sqlalchemy.ext.declarative import declarative_base
+
+Base: Any = declarative_base()
 
 
 class Country(Base):
@@ -32,6 +36,7 @@ class LocationThai(Base):
         "RegisterTmpStudent", back_populates="student_tmp_location")
     location_student_core = relationship(
         "RegisterCoreStudent", back_populates="student_core_location")
+    school_location = relationship("School", back_populates="location_school")
 # user_type : 1 =Super Admin , 2 = School Admin, 3 = User ,4 = teacher , 5 = student
 
 
@@ -61,11 +66,16 @@ class School(Base):
     school_id = Column(String(128), primary_key=True,
                        unique=True, default=generateId)
     school_name = Column(String(128), nullable=True)
+    school_description = Column(String(256), nullable=True)
+    school_address = Column(String(256), nullable=True)
+    location_id = Column(Integer, ForeignKey(
+        "app_location_thai.location_id", ondelete="CASCADE"), nullable=True)
     active = Column(Integer, default=1)
     cancelled = Column(Integer, default=1)
     create_date = Column(DateTime)
     update_date = Column(DateTime)
-
+    location_school = relationship(
+        "LocationThai", back_populates="school_location")
     user_school = relationship("User", back_populates="school_user")
     subject_school = relationship("Subject", back_populates="school_subject")
     course_school = relationship("Course", back_populates="school_course")

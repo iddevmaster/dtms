@@ -17,9 +17,13 @@ class SchoolRequestInSchema(BaseModel):
 class SchoolRequestOutSchema(BaseModel):
     school_id: Optional[str] = None
     school_name: Optional[str] = None
+    school_description: Optional[str] = None
+    school_address: Optional[str] = None
+    location_id: Optional[int] = None
     active: Optional[int] = None
     create_date: Optional[datetime] = None
     update_date: Optional[datetime] = None
+    location_school:  Optional[object] = None
 
     class Config:
         orm_mode = True
