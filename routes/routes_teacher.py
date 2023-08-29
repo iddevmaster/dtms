@@ -6,11 +6,11 @@ from sqlalchemy.orm import Session, joinedload
 
 from authen import auth_request
 from database import get_db
-from function import (ceil, ternaryZero, todaytime)
+from function import (ceil, ternaryZero, todaytime, rows_limit)
 from models import Teacher, TeacherIncome, TeacherLicense
-from schemas_format.general_schemas import (
-    FilterRequestSchema, ResponseProcess)
-from schemas_format.teacher_schemas import TeacherIncomeRequestInSchema, TeacherIncomeRequestOutSchema, TeacherLicenceRequestInSchema, TeacherLicenceRequestOutSchema, TeacherRequestInSchema, TeacherRequestOutSchema, TeacherRequestOutOptionSchema
+from schemas_format.general_schemas import (ResponseData,
+                                            FilterRequestSchema, ResponseProcess)
+from schemas_format.teacher_schemas import TeacherIncomeRequestInSchema, TeacherIncomeRequestOutSchema, TeacherLicenceRequestInSchema, TeacherLicenceRequestOutSchema, TeacherRequestInSchema, TeacherRequestOutSchema
 
 router_teacher = APIRouter()
 
@@ -44,33 +44,25 @@ def create_teacher(request: TeacherRequestInSchema, db: Session = Depends(get_db
 @router_teacher.post("/{school_id}/all", )
 def get_teacher(request: FilterRequestSchema, school_id: str, branch_id: str = "all",  db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
     skip = ternaryZero(((request.page - 1) * request.per_page))
-    limit = request.per_page
+    limit = rows_limit(request.per_page)
     search_value = request.search_value
+    result = db.query(Teacher).order_by(
+        desc(Teacher.create_date)).filter(Teacher.cancelled == 1)
+    total_data = result.count()
     if branch_id != 'all':
         # โชว์ครูเฉพาะสาขาตนเอง
-        queryset = Teacher.branch_id == branch_id
+        result = result.filter(Teacher.branch_id == branch_id)
     else:
-        queryset = Teacher.school_id == school_id
-    searchFilter = or_(Teacher.teacher_firstname.contains(search_value),
-                       Teacher.teacher_lastname.contains(search_value),
-                       Teacher.teacher_id_number.contains(search_value))
+        result = result.filter(Teacher.school_id == school_id)
 
-    # xpr = case([(Teacher.teacher_gender == 1, "ชาย"),
-    #            (Teacher.teacher_gender == 2, "หญิง")], else_='-').label("gender_format")
     if search_value:
-        result = db.query(Teacher).options(joinedload(Teacher.branch_teacher), joinedload(Teacher.school_teacher)).order_by(desc(Teacher.create_date)).filter(
-            Teacher.cancelled == 1, queryset, searchFilter).offset(skip).limit(limit).all()
-    else:
-        result = db.query(Teacher).options(joinedload(Teacher.branch_teacher), joinedload(Teacher.school_teacher)).order_by(desc(Teacher.create_date)).filter(
-            Teacher.cancelled == 1, queryset).offset(skip).limit(limit).all()
-    total_data = db.query(Teacher).filter(
-        Teacher.cancelled == 1, queryset).count()
-    total_filter_data = len(result)
+        result = result.filter(or_(Teacher.teacher_firstname.contains(search_value), Teacher.teacher_lastname.contains(
+            search_value), Teacher.teacher_id_number.contains(search_value)))
+    total_filter_data = result.count()
+    result = result.offset(skip).limit(limit).all()
     total_page = ceil(total_data / request.per_page)
-
-    # query = TeacherRequestInSchema.from_orm(result)
-    # query = query.dict()
-    return TeacherRequestOutOptionSchema(status="success", status_code="200", message="Success fetch all data", page=request.page, per_page=limit, total_page=total_page, total_data=total_data, total_filter_data=total_filter_data, data=result)
+    content = [TeacherRequestOutSchema.from_orm(p) for p in result]
+    return ResponseData(status="success", status_code="200", message="Success fetch all data", page=request.page, per_page=limit, total_page=total_page, total_data=total_data, total_filter_data=total_filter_data, data=content)
 
 
 @router_teacher.get("/{teacher_id}", response_model=TeacherRequestOutSchema)
@@ -171,39 +163,34 @@ def get_teacher_licence(teacher_id: str,  db: Session = Depends(get_db),  authen
 @router_teacher.get("/licence/{school_id}/all", response_model=list[TeacherRequestOutSchema])
 def get_teacher_licence(school_id: str, tl_level: int, vehicle_type_id: int, branch_id: str = "all",  db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
     presentday = datetime.today().strftime('%Y-%m-%d')
+    result = db.query(Teacher).join(TeacherLicense, Teacher.teacher_id == TeacherLicense.teacher_id).order_by(
+        desc(Teacher.create_date)).filter(Teacher.cancelled == 1)
     if branch_id != 'all':
         # โชว์ครูเฉพาะสาขาตนเอง
-        queryset = Teacher.branch_id == branch_id
+        result = result.filter(Teacher.branch_id == branch_id)
     else:
-        queryset = Teacher.school_id == school_id
+        result = result.filter(Teacher.school_id == school_id)
     # ประธาน
     if tl_level == 3:
         # ถ้าบัตรอนุญาตครูอยู่ที่ระดับ 3 ให้แสดงตามประเภทยานพาหนะ
-        queryset2 = TeacherLicense.tl_level == 3
-        queryset2a = TeacherLicense.vehicle_type_id == vehicle_type_id
-        queryset2b = and_(TeacherLicense.tl_date_of_expiry_staff > presentday,
-                          TeacherLicense.tl_date_of_expiry > presentday)
+        result = result.filter(TeacherLicense.tl_level == 3, TeacherLicense.vehicle_type_id == vehicle_type_id, and_(TeacherLicense.tl_date_of_expiry_staff > presentday,
+                                                                                                                     TeacherLicense.tl_date_of_expiry > presentday))
     # กรรมการ สามารถเลือกระดับ 3 และบัตรยานพาหนะอื่นๆ มาเป้นกรรมการได้
     elif tl_level == 2:
         # ถ้าบัตรอนุญาตครูอยู่ที่ระดับ 2 ให้แสดงข้อมูลระดับ 3 ไปด้วย
-        queryset2 = or_(TeacherLicense.tl_level == 2,
-                        TeacherLicense.tl_level == 3)
-        queryset2a = TeacherLicense.vehicle_type_id > 0
-        queryset2b = and_(TeacherLicense.tl_date_of_expiry_staff > presentday,
-                          TeacherLicense.tl_date_of_expiry > presentday)
+        result = result.filter(or_(TeacherLicense.tl_level == 2,
+                                   TeacherLicense.tl_level == 3), TeacherLicense.vehicle_type_id > 0, and_(TeacherLicense.tl_date_of_expiry_staff > presentday,
+                                                                                                           TeacherLicense.tl_date_of_expiry > presentday))
     elif tl_level == 1:
         # สอนปฏิบัติ - ทฤษฏี  เป็นกรรมการไม่ได้
-        queryset2 = TeacherLicense.tl_level != 0
-        queryset2a = TeacherLicense.vehicle_type_id == vehicle_type_id
-        queryset2b = and_(TeacherLicense.tl_date_of_expiry_staff > presentday,
-                          TeacherLicense.tl_date_of_expiry > presentday)
+        result = result.filter(TeacherLicense.tl_level != 0, TeacherLicense.vehicle_type_id == vehicle_type_id, and_(TeacherLicense.tl_date_of_expiry_staff > presentday,
+                                                                                                                     TeacherLicense.tl_date_of_expiry > presentday))
     else:
         #
-        queryset2 = TeacherLicense.tl_level != 0
-        queryset2a = TeacherLicense.vehicle_type_id > 0
-        queryset2b = TeacherLicense.tl_id > 0
-    result = db.query(Teacher).options(joinedload(Teacher.branch_teacher), joinedload(Teacher.school_teacher)).join(TeacherLicense, Teacher.teacher_id == TeacherLicense.teacher_id).order_by(desc(Teacher.create_date)).filter(
-        queryset, queryset2, queryset2a, queryset2b,  Teacher.cancelled == 1).all()
+        result = result.filter(TeacherLicense.tl_level != 0,
+                               TeacherLicense.vehicle_type_id > 0, TeacherLicense.tl_id > 0)
+
+    result = result.all()
     return result
 
 
