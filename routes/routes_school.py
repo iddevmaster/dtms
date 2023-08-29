@@ -43,14 +43,13 @@ async def get_school(request: FilterRequestSchema, db: Session = Depends(get_db)
     skip = ternaryZero(((request.page - 1) * request.per_page))
     limit = request.per_page
     search_value = request.search_value
+    result = db.query(School).filter(School.cancelled == 1)
+    total_data = result.count()
     if search_value:
-        result = db.query(School).filter(School.school_name ==
-                                         search_value, School.cancelled == 1).offset(skip).limit(limit).all()
-    else:
-        result = db.query(School).order_by(desc(School.create_date)).filter(
-            School.cancelled == 1).offset(skip).limit(limit).all()
-    total_data = db.query(School).count()
-    total_filter_data = len(result)
+        result = result.filter(School.school_name.contains(search_value))
+
+    total_filter_data = result.count()
+    result = result.offset(skip).limit(limit).all()
     total_page = ceil(total_data / request.per_page)
     return SchoolRequestOutOptionSchema(status="success", status_code="200", message="Success fetch all data", page=request.page, per_page=limit, total_page=total_page, total_data=total_data, total_filter_data=total_filter_data, data=result)
 
