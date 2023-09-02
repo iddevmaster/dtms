@@ -68,6 +68,10 @@ class School(Base):
     school_name = Column(String(128), nullable=True)
     school_description = Column(String(256), nullable=True)
     school_address = Column(String(256), nullable=True)
+    school_phone = Column(String(48), nullable=True)
+    school_email = Column(String(48), nullable=True)
+    school_tax = Column(String(48), nullable=True)
+    school_branch_amount = Column(Integer, nullable=True)
     location_id = Column(Integer, ForeignKey(
         "app_location_thai.location_id", ondelete="CASCADE"), nullable=True)
     active = Column(Integer, default=1)

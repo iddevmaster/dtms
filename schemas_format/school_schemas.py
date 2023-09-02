@@ -8,6 +8,13 @@ from pydantic import BaseModel
 
 class SchoolRequestInSchema(BaseModel):
     school_name: Optional[str] = None
+    school_description: Optional[str] = None
+    school_address: Optional[str] = None
+    school_phone: Optional[str] = None
+    school_email: Optional[str] = None
+    school_tax: Optional[str] = None
+    school_branch_amount: Optional[int] = None
+    location_id: Optional[int] = None
     active: Optional[int] = None
 
     class Config:
@@ -19,6 +26,10 @@ class SchoolRequestOutSchema(BaseModel):
     school_name: Optional[str] = None
     school_description: Optional[str] = None
     school_address: Optional[str] = None
+    school_phone: Optional[str] = None
+    school_email: Optional[str] = None
+    school_tax: Optional[str] = None
+    school_branch_amount: Optional[int] = None
     location_id: Optional[int] = None
     active: Optional[int] = None
     create_date: Optional[datetime] = None

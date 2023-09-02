@@ -4,18 +4,25 @@ from sqlalchemy.orm import Session
 
 from authen import auth_request
 from database import get_db
-from function import ceil, ternaryZero, todaytime
+from function import ceil, ternaryZero, todaytime, rows_limit
 from models import Branch, School
 
-from schemas_format.general_schemas import FilterRequestSchema,  ResponseProcess
+from schemas_format.general_schemas import FilterRequestSchema, ResponseData,  ResponseProcess
 from schemas_format.school_schemas import BranchRequestInSchema, BranchRequestOutSchema, BranchRequestOutOptionSchema, SchoolRequestInSchema, SchoolRequestOutSchema, SchoolRequestOutOptionSchema
 router_school = APIRouter()
 
 
-@router_school.post("/create")
+@router_school.post("/create", response_model=SchoolRequestOutSchema)
 async def create_school(request: SchoolRequestInSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
     _school = School(
         school_name=request.school_name,
+        school_description=request.school_description,
+        school_address=request.school_address,
+        school_phone=request.school_phone,
+        school_email=request.school_email,
+        school_tax=request.school_tax,
+        school_branch_amount=request.school_branch_amount,
+        location_id=request.location_id,
         active=request.active,
         create_date=todaytime(),
         update_date=todaytime()
@@ -35,23 +42,29 @@ async def create_school(request: SchoolRequestInSchema, db: Session = Depends(ge
     )
     db.add(_branch)
     db.commit()
-    return ResponseProcess(status="success", status_code="200", message="Success created data")
+    return _school
 
 
-@router_school.post("/all")
-async def get_school(request: FilterRequestSchema, db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
-    skip = ternaryZero(((request.page - 1) * request.per_page))
-    limit = request.per_page
-    search_value = request.search_value
-    result = db.query(School).filter(School.cancelled == 1)
-    total_data = result.count()
-    if search_value:
-        result = result.filter(School.school_name.contains(search_value))
+@router_school.put("/{school_id}", response_model=SchoolRequestOutSchema)
+async def update_school(school_id: str, request: SchoolRequestInSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+    _school = db.query(School).filter(
+        School.school_id == school_id).one_or_none()
+    if not _school:
+        raise HTTPException(status_code=404, detail="Data not found")
+    _school.school_name = request.school_name
+    _school.school_description = request.school_description
+    _school.school_address = request.school_address
+    _school.school_phone = request.school_phone
+    _school.school_email = request.school_email
+    _school.school_tax = request.school_tax
+    _school.school_branch_amount = request.school_branch_amount
+    _school.location_id = request.location_id
+    _school.active = request.active
+    _school.update_date = todaytime()
 
-    total_filter_data = result.count()
-    result = result.offset(skip).limit(limit).all()
-    total_page = ceil(total_data / request.per_page)
-    return SchoolRequestOutOptionSchema(status="success", status_code="200", message="Success fetch all data", page=request.page, per_page=limit, total_page=total_page, total_data=total_data, total_filter_data=total_filter_data, data=result)
+    db.commit()
+    db.refresh(_school)
+    return _school
 
 
 @router_school.get("/{school_id}", response_model=SchoolRequestOutSchema)
@@ -63,19 +76,22 @@ async def get_by_school_id(school_id: str,  db: Session = Depends(get_db), authe
     return _school
 
 
-@router_school.put("/{school_id}")
-async def update_school(school_id: str, request: SchoolRequestInSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
-    _school = db.query(School).filter(
-        School.school_id == school_id).one_or_none()
-    if not _school:
-        raise HTTPException(status_code=404, detail="Data not found")
-    _school.school_name = request.school_name
-    _school.active = request.active
-    _school.update_date = todaytime()
+@router_school.post("/all")
+async def get_school(request: FilterRequestSchema, db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
+    skip = ternaryZero(((request.page - 1) * request.per_page))
+    limit = rows_limit(request.per_page)
+    search_value = request.search_value
+    result = db.query(School).filter(School.cancelled == 1)
+    total_data = result.count()
+    if search_value:
+        result = result.filter(or_(School.school_name.contains(search_value), School.school_description.contains(
+            search_value), School.school_address.contains(search_value), School.school_phone.contains(search_value), School.school_tax.contains(search_value)))
 
-    db.commit()
-    db.refresh(_school)
-    return ResponseProcess(status="success", status_code="200", message="Success update data")
+    total_filter_data = result.count()
+    result = result.offset(skip).limit(limit).all()
+    total_page = ceil(total_data / request.per_page)
+    content = [SchoolRequestOutSchema.from_orm(p) for p in result]
+    return ResponseData(status="success", status_code="200", message="Success fetch all data", page=request.page, per_page=limit, total_page=total_page, total_data=total_data, total_filter_data=total_filter_data, data=content)
 
 
 @router_school.delete("/{school_id}")
@@ -109,7 +125,7 @@ async def create_branch(request: BranchRequestInSchema, db: Session = Depends(ge
 @router_school.post("/branch/all/{school_id}")
 async def get_branch(school_id: str, request: FilterRequestSchema, db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
     skip = ternaryZero(((request.page - 1) * request.per_page))
-    limit = request.per_page
+    limit = rows_limit(request.per_page)
     search_value = request.search_value
 
     searchFilter = or_(Branch.branch_code.contains(search_value),
