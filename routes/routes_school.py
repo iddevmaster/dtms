@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import desc, or_
 from sqlalchemy.orm import Session
-
+from typing import List
 from authen import auth_request
 from database import get_db
 from function import ceil, ternaryZero, todaytime, rows_limit
-from models import Branch, School
+from models import Branch, School, Company
 
 from schemas_format.general_schemas import FilterRequestSchema, ResponseData,  ResponseProcess
-from schemas_format.school_schemas import BranchRequestInSchema, BranchRequestOutSchema, SchoolRequestInSchema, SchoolRequestOutSchema
+from schemas_format.school_schemas import BranchRequestInSchema, BranchRequestOutSchema, CompanyRequestInSchema, CompanyRequestOutSchema, SchoolRequestInSchema, SchoolRequestOutSchema
 router_school = APIRouter()
 
 
@@ -36,6 +36,11 @@ async def create_school(request: SchoolRequestInSchema, db: Session = Depends(ge
     _branch = Branch(
         branch_code="0",
         branch_name="สำนักงานใหญ่",
+        branch_description="-",
+        branch_address=request.school_address,
+        branch_phone=request.school_phone,
+        branch_email=request.school_email,
+        location_id=request.location_id,
         active=1,
         create_date=todaytime(),
         update_date=todaytime(),
@@ -190,3 +195,74 @@ async def delete_branch(branch_id: int, db: Session = Depends(get_db), authentic
     _branch.cancelled = 0
     db.commit()
     return ResponseProcess(status="success", status_code="200", message="Success delete data")
+
+
+@router_school.post("/company/create", response_model=CompanyRequestOutSchema)
+async def create_company(request: CompanyRequestInSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+    _company = Company(
+        company_name=request.company_name,
+        company_tax=request.company_tax,
+        company_description=request.company_description,
+        company_address=request.company_address,
+        company_phone=request.company_phone,
+        company_email=request.company_email,
+        company_cover=request.company_cover,
+        active=request.active,
+        create_date=todaytime(),
+        update_date=todaytime(),
+        location_id=request.location_id,
+        school_id=request.school_id
+    )
+    db.add(_company)
+    db.commit()
+    db.refresh(_company)
+    return _company
+
+
+@router_school.put("/company/{company_id}", response_model=CompanyRequestOutSchema)
+async def update_company(company_id: str, request: CompanyRequestInSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+    _company = db.query(Company).filter(
+        Company.company_id == company_id).one_or_none()
+    if not _company:
+        raise HTTPException(status_code=404, detail="Data not found")
+    _company.company_name = request.company_name
+    _company.company_tax = request.company_tax
+    _company.company_description = request.company_description
+    _company.company_address = request.company_address
+    _company.company_phone = request.company_phone
+    _company.company_email = request.company_email
+    _company.company_cover = request.company_cover
+    _company.company_cover = request.company_cover
+    _company.update_date = todaytime()
+    _company.location_id = request.location_id
+    _company.school_id = request.school_id
+    db.commit()
+    db.refresh(_company)
+    return _company
+
+
+@router_school.get("/company/{company_id}", response_model=CompanyRequestOutSchema)
+async def get_by_company_id(company_id: str,  db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+    _company = db.query(Company).filter(
+        Company.company_id == company_id).one_or_none()
+    if not _company:
+        raise HTTPException(status_code=404, detail="Data not found")
+    return _company
+
+
+@router_school.delete("/company/{company_id}")
+async def delete_company(company_id: int, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+    _company = db.query(Company).filter(
+        Company.company_id == company_id).one_or_none()
+    if not _company:
+        raise HTTPException(status_code=404, detail="Data not found")
+    _company.cancelled = 0
+    db.commit()
+    return ResponseProcess(status="success", status_code="200", message="Success delete data")
+
+
+@router_school.get("/company/all/{school_id}", response_model=List[CompanyRequestOutSchema])
+async def get_company_all(school_id: str,  db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+    _company = db.query(Company).filter(
+        Company.school_id == school_id).all()
+    return _company

@@ -74,3 +74,37 @@ class BranchRequestOutSchema(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class CompanyRequestInSchema(BaseModel):
+    company_name: Optional[str] = None
+    company_tax: Optional[str] = None
+    company_description: Optional[str] = None
+    company_address: Optional[str] = None
+    company_phone: Optional[str] = None
+    company_email: Optional[str] = None
+    company_cover: Optional[str] = None
+    active: Optional[int] = None
+    location_id: Optional[int] = None
+    school_id: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class CompanyRequestOutSchema(BaseModel):
+    company_id: Optional[str] = None
+    company_name: Optional[str] = None
+    company_tax: Optional[str] = None
+    company_description: Optional[str] = None
+    company_address: Optional[str] = None
+    company_phone: Optional[str] = None
+    company_email: Optional[str] = None
+    company_cover: Optional[str] = None
+    active: Optional[int] = None
+    location_id: Optional[int] = None
+    school_id: Optional[str] = None
+    location_company: object
+
+    class Config:
+        orm_mode = True
