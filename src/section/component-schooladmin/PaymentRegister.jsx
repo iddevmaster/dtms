@@ -1,13 +1,16 @@
 import React, { Component } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+import {
+  Row,
+  Col,
+  Breadcrumb,
+  Card,
+  Button,
+  Form,
+  InputGroup,
+  Table,
+} from "react-bootstrap";
 import Select from "react-select";
-import Table from "react-bootstrap/Table";
+
 import { LinkContainer } from "react-router-bootstrap";
 import ReactToPrint from "react-to-print";
 import PrintRegister from "../export-report/PrintRegister";
@@ -178,7 +181,7 @@ export default class PaymentRegister extends Component {
         <Card border="info">
           <Card.Body>
             <Row>
-              <Col sm={6}>จำนวนข้อมูล {param.total_data} เรคคอร์ด</Col>
+              <Col sm={6}>จำนวนข้อมูล {param.total_data} รายการ</Col>
               <Col sm={3}>
                 <Select
                   id="branch_id"

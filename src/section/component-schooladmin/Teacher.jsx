@@ -299,7 +299,7 @@ export default class Teacher extends Component {
           </Card.Header>
           <Card.Body>
             <Row>
-              <Col sm={9}>จำนวนข้อมูล {param.total_data} เรคคอร์ด</Col>
+              <Col sm={9}>จำนวนข้อมูล {param.total_data} รายการ</Col>
               <Col sm={3}>
                 <Form.Control
                   type="text"

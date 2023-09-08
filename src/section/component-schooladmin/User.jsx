@@ -319,7 +319,7 @@ export default class User extends Component {
           </Card.Header>
           <Card.Body>
             <Row>
-              <Col sm={3}>จำนวนข้อมูล {param.total_data} เรคคอร์ด</Col>
+              <Col sm={3}>จำนวนข้อมูล {param.total_data} รายการ</Col>
               <Col sm={3}>
                 <Select
                   id="branch_id"

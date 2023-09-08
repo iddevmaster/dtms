@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useParams } from "react-router-dom";
 import {
   Form,
   Row,
@@ -7,17 +8,15 @@ import {
   Card,
   Button,
   Table,
-  InputGroup,
   Modal,
   Image,
 } from "react-bootstrap";
 import Select from "react-select";
-import Swal from "sweetalert2";
+import Functions from "../../functions";
 import { LinkContainer } from "react-router-bootstrap";
 import Common from "../../common";
-import Functions from "../../functions";
 import axios from "axios";
-const BASE_IMAGE = Common.IMAGE_URL;
+import Swal from "sweetalert2";
 const customStyles = {
   control: (base) => ({
     ...base,
@@ -25,28 +24,29 @@ const customStyles = {
     minHeight: 47,
   }),
 };
-const domain = window.location.protocol + "//" + window.location.host;
-export default class SchoolList extends Component {
+const BASE_IMAGE = Common.IMAGE_URL;
+const GetDataForm = () => {
+  const { school_id } = useParams();
+
+  return <CompanyList school_id={school_id} />;
+};
+export default GetDataForm;
+
+class CompanyList extends Component {
   state = {
-    param: [],
-    page: 1,
-    per_page: 25,
-    search_value: "",
+    company_name: "",
+    company_tax: "",
+    company_description: "",
+    company_address: "",
+    company_phone: "",
+    company_email: "",
+    company_cover: "",
+    active: 1,
+    location_id: 0,
+
     data: [],
     isModalForm: false,
     isModalFormLogo: false,
-
-    school_id: "",
-    school_name: "",
-    school_description: "",
-    school_address: "",
-    school_phone: "",
-    school_email: "",
-    school_tax: "",
-    school_branch_amount: "",
-    school_cover: "",
-    location_id: 0,
-    active: 1,
 
     list_location: [],
     defaultLocation: {
@@ -57,26 +57,18 @@ export default class SchoolList extends Component {
   };
 
   refreshData = async () => {
+    const school_id = this.props.school_id;
     try {
       await axios
-        .post(
-          Common.API_URL + "school/all",
-          {
-            page: this.state.page,
-            per_page: this.state.per_page,
-            search_value: this.state.search_value,
-          },
-          Common.options
-        )
+        .get(Common.API_URL + "school/company/all/" + school_id, Common.options)
         .then((response) => {
           let res = response.data;
-          this.setState({ data: res.data, param: res });
+          this.setState({ data: res });
         });
     } catch (error) {
       console.log(error);
     }
   };
-
   getLocation = (newValue) => {
     // console.log(inputValue);
     try {
@@ -134,14 +126,16 @@ export default class SchoolList extends Component {
 
     this.setState({ location_id: e.value, defaultLocation: e });
   };
+
   handleCreateSubmit = () => {
+    const school_id = this.props.school_id;
     if (
-      this.state.school_name === "" ||
-      this.state.school_address === "" ||
-      this.state.school_phone === "" ||
-      this.state.school_email === "" ||
-      this.state.school_tax === "" ||
-      this.state.school_branch_amount === 0 ||
+      this.state.company_name === "" ||
+      this.state.company_tax === "" ||
+      this.state.company_description === "" ||
+      this.state.company_address === "" ||
+      this.state.company_phone === "" ||
+      this.state.company_email === "" ||
       this.state.location_id === 0
     ) {
       Swal.fire({
@@ -155,18 +149,18 @@ export default class SchoolList extends Component {
     try {
       axios
         .post(
-          Common.API_URL + "school/create",
+          Common.API_URL + "school/company/create",
           {
-            school_name: this.state.school_name,
-            school_description: this.state.school_description,
-            school_address: this.state.school_address,
-            school_phone: this.state.school_phone,
-            school_email: this.state.school_email,
-            school_tax: this.state.school_tax,
-            school_branch_amount: this.state.school_branch_amount,
-            school_cover: this.state.school_cover,
-            location_id: this.state.location_id,
+            company_name: this.state.company_name,
+            company_tax: this.state.company_tax,
+            company_description: this.state.company_description,
+            company_address: this.state.company_address,
+            company_phone: this.state.company_phone,
+            company_email: this.state.company_email,
+            company_cover: this.state.company_cover,
             active: this.state.active,
+            location_id: this.state.location_id,
+            school_id: school_id,
           },
           Common.options
         )
@@ -184,64 +178,17 @@ export default class SchoolList extends Component {
       console.log(error);
     }
   };
-  handleUpdateWithCoverSubmit = (school_cover) => {
-    if (
-      this.state.school_name === "" ||
-      this.state.school_address === "" ||
-      this.state.school_phone === "" ||
-      this.state.school_email === "" ||
-      this.state.school_tax === "" ||
-      this.state.school_branch_amount === 0 ||
-      this.state.location_id === 0
-    ) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "ไม่สามารถทำรายการได้ !",
-      });
-      return false;
-    }
 
-    try {
-      axios
-        .put(
-          Common.API_URL + `school/${this.state.school_id}`,
-          {
-            school_name: this.state.school_name,
-            school_description: this.state.school_description,
-            school_address: this.state.school_address,
-            school_phone: this.state.school_phone,
-            school_email: this.state.school_email,
-            school_tax: this.state.school_tax,
-            school_branch_amount: this.state.school_branch_amount,
-            school_cover: school_cover,
-            location_id: this.state.location_id,
-            active: this.state.active,
-          },
-          Common.options
-        )
-        .then((res) => {
-          this.refreshData();
-          this.clearState();
-          Swal.fire({
-            icon: "success",
-            title: "ทำรายการสำเร็จ",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
   handleUpdateSubmit = () => {
+    const school_id = this.props.school_id;
     if (
-      this.state.school_name === "" ||
-      this.state.school_address === "" ||
-      this.state.school_phone === "" ||
-      this.state.school_email === "" ||
-      this.state.school_tax === "" ||
-      this.state.school_branch_amount === 0 ||
+      this.state.company_id === "" ||
+      this.state.company_name === "" ||
+      this.state.company_tax === "" ||
+      this.state.company_description === "" ||
+      this.state.company_address === "" ||
+      this.state.company_phone === "" ||
+      this.state.company_email === "" ||
       this.state.location_id === 0
     ) {
       Swal.fire({
@@ -255,18 +202,18 @@ export default class SchoolList extends Component {
     try {
       axios
         .put(
-          Common.API_URL + `school/${this.state.school_id}`,
+          Common.API_URL + `school/company/${this.state.company_id}`,
           {
-            school_name: this.state.school_name,
-            school_description: this.state.school_description,
-            school_address: this.state.school_address,
-            school_phone: this.state.school_phone,
-            school_email: this.state.school_email,
-            school_tax: this.state.school_tax,
-            school_branch_amount: this.state.school_branch_amount,
-            school_cover: this.state.school_cover,
-            location_id: this.state.location_id,
+            company_name: this.state.company_name,
+            company_tax: this.state.company_tax,
+            company_description: this.state.company_description,
+            company_address: this.state.company_address,
+            company_phone: this.state.company_phone,
+            company_email: this.state.company_email,
+            company_cover: this.state.company_cover,
             active: this.state.active,
+            location_id: this.state.location_id,
+            school_id: school_id,
           },
           Common.options
         )
@@ -285,56 +232,99 @@ export default class SchoolList extends Component {
     }
   };
 
-  handleDelete = (school_id) => {
-    Swal.fire({
-      title: "ต้องการลบข้อมูลหรือไม่ ?",
-      text: "",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "ใช่",
-      cancelButtonText: "ยกเลิก",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        try {
-          axios
-            .delete(Common.API_URL + `school/${school_id}`, Common.options)
-            .then((res) => {
-              Swal.fire("ลบข้อมูลแล้ว!", "", "success");
+  handleUpdateWithCoverSubmit = (company_cover) => {
+    const school_id = this.props.school_id;
+    if (
+      this.state.company_id === "" ||
+      this.state.company_name === "" ||
+      this.state.company_tax === "" ||
+      this.state.company_description === "" ||
+      this.state.company_address === "" ||
+      this.state.company_phone === "" ||
+      this.state.company_email === "" ||
+      this.state.location_id === 0
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "ไม่สามารถทำรายการได้ !",
+      });
+      return false;
+    }
 
-              this.refreshData();
-            });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    });
+    try {
+      axios
+        .put(
+          Common.API_URL + `school/company/${this.state.company_id}`,
+          {
+            company_name: this.state.company_name,
+            company_tax: this.state.company_tax,
+            company_description: this.state.company_description,
+            company_address: this.state.company_address,
+            company_phone: this.state.company_phone,
+            company_email: this.state.company_email,
+            company_cover: company_cover,
+            active: this.state.active,
+            location_id: this.state.location_id,
+            school_id: school_id,
+          },
+          Common.options
+        )
+        .then((res) => {
+          this.refreshData();
+          this.clearState();
+          Swal.fire({
+            icon: "success",
+            title: "ทำรายการสำเร็จ",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        });
+    } catch (error) {
+      console.log(error);
+    }
   };
   handleClickEdit = (rs) => {
     let label =
-      rs.location_school?.district_name +
+      rs.location_company?.district_name +
       " - " +
-      rs.location_school?.amphur_name +
+      rs.location_company?.amphur_name +
       " - " +
-      rs.location_school?.province_name +
+      rs.location_company?.province_name +
       " - " +
-      rs.location_school?.zipcode;
+      rs.location_company?.zipcode;
     this.setState({
-      school_id: rs.school_id,
-      school_name: rs.school_name,
-      school_description: rs.school_description,
-      school_address: rs.school_address,
-      school_phone: rs.school_phone,
-      school_email: rs.school_email,
-      school_tax: rs.school_tax,
-      school_branch_amount: rs.school_branch_amount,
-      school_cover: rs.school_cover,
-      active: rs.active,
+      company_id: rs.company_id,
+      company_name: rs.company_name,
+      company_tax: rs.company_tax,
+      company_description: rs.company_description,
+      company_address: rs.company_address,
+      company_phone: rs.company_phone,
+      company_email: rs.company_email,
+      company_cover: rs.company_cover,
       location_id: rs.location_id,
       defaultLocation: {
         value: rs.location_id,
         label: label,
+      },
+    });
+  };
+
+  clearState = () => {
+    this.setState({
+      isModalForm: false,
+      isModalFormLogo: false,
+      company_name: "",
+      company_tax: "",
+      company_description: "",
+      company_address: "",
+      company_phone: "",
+      company_email: "",
+      company_cover: "",
+      location_id: "",
+      defaultLocation: {
+        value: 0,
+        label: "",
       },
     });
   };
@@ -365,11 +355,14 @@ export default class SchoolList extends Component {
           Common.options
         )
         .then((res) => {
-          if (this.state.school_cover !== "") {
-            this.DeleteImage(this.state.school_cover);
+          if (this.state.company_cover !== "") {
+            this.DeleteImage(this.state.company_cover);
           }
           let r = res.data;
           this.handleUpdateWithCoverSubmit(r?.file_path);
+          // this.setState({
+          //   company_cover: r?.file_path,
+          // });
         });
     } catch (error) {
       console.log(error);
@@ -386,62 +379,72 @@ export default class SchoolList extends Component {
     }
   };
 
-  clearState = () => {
-    this.setState({
-      isModalForm: false,
-      isModalFormLogo: false,
-      school_id: "",
-      school_name: "",
-      school_description: "",
-      school_address: "",
-      school_phone: "",
-      school_email: "",
-      school_tax: "",
-      school_branch_amount: "",
-      school_cover: "",
-      location_id: 0,
-      defaultLocation: {
-        value: 0,
-        label: "",
-      },
+  handleDelete = (company_id) => {
+    Swal.fire({
+      title: "ต้องการลบข้อมูลหรือไม่ ?",
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ใช่",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          axios
+            .delete(
+              Common.API_URL + `school/company/${company_id}`,
+              Common.options
+            )
+            .then((res) => {
+              Swal.fire("ลบข้อมูลแล้ว!", "", "success");
+
+              this.refreshData();
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      }
     });
   };
-
   componentDidMount() {
     this.refreshData();
+    this.getLocation("");
   }
 
   render() {
     const {
-      data,
-      param,
-      page,
-      isModalForm,
-      isModalFormLogo,
+      company_id,
       list_location,
       defaultLocation,
-      school_id,
+      data,
+      isModalForm,
+      isModalFormLogo,
       filecore,
     } = this.state;
-
     return (
       <div>
         <Row>
           <Col sm={8}>
-            <h3>ข้อมูลโรงเรียน</h3>
+            <h3>ข้อมูลบริษัท</h3>
           </Col>
           <Col sm={4}>
             <Breadcrumb>
-              <Breadcrumb.Item href="/">หน้าหลัก</Breadcrumb.Item>
-
-              <Breadcrumb.Item active>ข้อมูลโรงเรียน</Breadcrumb.Item>
+              <LinkContainer to="/">
+                <Breadcrumb.Item>หน้าหลัก</Breadcrumb.Item>
+              </LinkContainer>
+              <LinkContainer to="/school">
+                <Breadcrumb.Item>ข้อมูลโรงเรียน</Breadcrumb.Item>
+              </LinkContainer>
+              <Breadcrumb.Item active>ข้อมูลบริษัท</Breadcrumb.Item>
             </Breadcrumb>
           </Col>
         </Row>
         <Card border="info">
           <Card.Header>
             <Row>
-              <Col sm={8}>ตารางข้อมูลโรงเรียน</Col>
+              <Col sm={8}>ตารางข้อมูลบริษัท</Col>
               <Col sm={4}>
                 <div align="right">
                   <Button onClick={(e) => this.setState({ isModalForm: true })}>
@@ -452,51 +455,26 @@ export default class SchoolList extends Component {
             </Row>
           </Card.Header>
           <Card.Body>
-            <Row>
-              <Col sm={9}>จำนวนข้อมูล {param?.total_data} รายการ</Col>
-              <Col sm={3}>
-                <Form.Control
-                  type="text"
-                  placeholder="ค้นหา"
-                  onChange={(e) => [
-                    this.setState({
-                      search_value: e.target.value,
-                    }),
-                    this.refreshData(),
-                  ]}
-                  onKeyUp={(e) => [
-                    this.setState({
-                      search_value: e.target.value,
-                    }),
-                    this.refreshData(),
-                  ]}
-                />
-              </Col>
-            </Row>
             <Table striped>
               <thead>
                 <tr>
-                  <th>โรงเรียน</th>
+                  <th>#</th>
+                  <th>บริษัท</th>
                   <th>เบอร์โทรศัพท์</th>
                   <th>อีเมล</th>
+                  <th>โลโก้</th>
                   <th>สถานะ</th>
                   <th>วันที่ทำรายการ</th>
-                  <th>URL เข้าสู่ระบบ</th>
-                  <th>โลโก้</th>
-                  <th>บริษัท</th>
                   <th>จัดการ</th>
                 </tr>
               </thead>
               <tbody>
                 {data?.map((rs, index) => (
                   <tr key={index}>
-                    <td>{rs.school_name}</td>
-                    <td>{rs.school_phone}</td>
-                    <td>{rs.school_email}</td>
-                    <td>{rs.active === 1 ? "กำลังใช้งาน" : "ปิดการใช้งาน"}</td>
-
-                    <td>{Functions.format_date_time(rs.create_date)}</td>
-                    <td>{`${domain}/${rs.school_id}/login`}</td>
+                    <td>{index + 1}</td>
+                    <td>{rs.company_name}</td>
+                    <td>{rs.company_phone}</td>
+                    <td>{rs.company_email}</td>
                     <td>
                       <Button
                         size="sm"
@@ -513,15 +491,11 @@ export default class SchoolList extends Component {
                         ></i>
                       </Button>
                     </td>
-                    <td align="center">
-                      <LinkContainer to={`/company/form/${rs.school_id}`}>
-                        <Button size="sm" variant="success" type="button">
-                          <i className="fa fa-building" aria-hidden="true"></i>
-                        </Button>
-                      </LinkContainer>
-                    </td>
+                    <td>{rs.active === 1 ? "กำลังใช้งาน" : "ปิดการใช้งาน"}</td>
 
-                    <td align="center">
+                    <td>{Functions.format_date_time(rs.create_date)}</td>
+
+                    <td>
                       <Button
                         size="sm"
                         variant="warning"
@@ -536,7 +510,7 @@ export default class SchoolList extends Component {
                         size="sm"
                         variant="danger"
                         type="button"
-                        onClick={() => this.handleDelete(rs.school_id)}
+                        onClick={() => this.handleDelete(rs.company_id)}
                       >
                         <i className="fa fa-trash" aria-hidden="true"></i>
                       </Button>
@@ -545,41 +519,6 @@ export default class SchoolList extends Component {
                 ))}
               </tbody>
             </Table>
-            <Row>
-              <Col></Col>
-              <Col sm={2}>
-                <InputGroup className="mb-3" size="sm">
-                  <InputGroup.Text>หน้าที่</InputGroup.Text>
-                  <Form.Control
-                    type="number"
-                    defaultValue={page}
-                    onChange={(e) => [
-                      this.setState({
-                        page: e.target.value,
-                      }),
-                      this.refreshData(),
-                    ]}
-                    onKeyUp={(e) => [
-                      this.setState({
-                        page: e.target.value,
-                      }),
-                      this.refreshData(),
-                    ]}
-                    onClick={(e) => [
-                      this.setState({
-                        page: e.target.value,
-                      }),
-                      this.refreshData(),
-                    ]}
-                    style={{ textAlign: "center" }}
-                  />
-                  <InputGroup.Text>
-                    ทั้งหมด {param.total_page} หน้า
-                  </InputGroup.Text>
-                </InputGroup>
-              </Col>
-              <Col></Col>
-            </Row>
           </Card.Body>
         </Card>
 
@@ -589,20 +528,20 @@ export default class SchoolList extends Component {
           size="lg"
         >
           <Modal.Header closeButton>
-            <Modal.Title>แบบฟอร์มโรงเรียน</Modal.Title>
+            <Modal.Title>แบบฟอร์มบริษัท</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Row>
               <Col lg="4" md="6" sm="12">
                 <Form.Group>
-                  <Form.Label>ชื่อโรงเรียน</Form.Label>{" "}
+                  <Form.Label>ชื่อบริษัท</Form.Label>{" "}
                   <label style={{ color: "red" }}> *</label>
                   <Form.Control
                     type="text"
                     onChange={(e) =>
-                      this.setState({ school_name: e.target.value })
+                      this.setState({ company_name: e.target.value })
                     }
-                    value={this.state.school_name}
+                    value={this.state.company_name}
                   />
                 </Form.Group>
               </Col>
@@ -613,9 +552,9 @@ export default class SchoolList extends Component {
                   <Form.Control
                     type="text"
                     onChange={(e) =>
-                      this.setState({ school_tax: e.target.value })
+                      this.setState({ company_tax: e.target.value })
                     }
-                    value={this.state.school_tax}
+                    value={this.state.company_tax}
                   />
                 </Form.Group>
               </Col>
@@ -627,10 +566,10 @@ export default class SchoolList extends Component {
                     type="text"
                     onChange={(e) =>
                       this.setState({
-                        school_description: e.target.value,
+                        company_description: e.target.value,
                       })
                     }
-                    value={this.state.school_description}
+                    value={this.state.company_description}
                   />
                 </Form.Group>
               </Col>
@@ -641,9 +580,9 @@ export default class SchoolList extends Component {
                   <Form.Control
                     type="text"
                     onChange={(e) =>
-                      this.setState({ school_address: e.target.value })
+                      this.setState({ company_address: e.target.value })
                     }
-                    value={this.state.school_address}
+                    value={this.state.company_address}
                   />
                 </Form.Group>
               </Col>
@@ -669,9 +608,9 @@ export default class SchoolList extends Component {
                   <Form.Control
                     type="text"
                     onChange={(e) =>
-                      this.setState({ school_phone: e.target.value })
+                      this.setState({ company_phone: e.target.value })
                     }
-                    value={this.state.school_phone}
+                    value={this.state.company_phone}
                   />
                 </Form.Group>
               </Col>
@@ -682,24 +621,9 @@ export default class SchoolList extends Component {
                   <Form.Control
                     type="text"
                     onChange={(e) =>
-                      this.setState({ school_email: e.target.value })
+                      this.setState({ company_email: e.target.value })
                     }
-                    value={this.state.school_email}
-                  />
-                </Form.Group>
-              </Col>
-              <Col lg="4" md="6" sm="12">
-                <Form.Group>
-                  <Form.Label>จำนวนสาขา</Form.Label>{" "}
-                  <label style={{ color: "red" }}> *</label>
-                  <Form.Control
-                    type="number"
-                    onChange={(e) =>
-                      this.setState({
-                        school_branch_amount: e.target.value,
-                      })
-                    }
-                    value={this.state.school_branch_amount}
+                    value={this.state.company_email}
                   />
                 </Form.Group>
               </Col>
@@ -726,7 +650,7 @@ export default class SchoolList extends Component {
             <Button
               variant="primary"
               onClick={
-                school_id === ""
+                company_id === ""
                   ? this.handleCreateSubmit
                   : this.handleUpdateSubmit
               }
@@ -744,9 +668,9 @@ export default class SchoolList extends Component {
           <Modal.Body>
             <Image
               src={
-                Functions.check_empty_value(this.state.school_cover) === true
+                Functions.check_empty_value(this.state.company_cover) === true
                   ? require("../../asset/images/no-image-icon-6.png")
-                  : BASE_IMAGE + this.state.school_cover
+                  : BASE_IMAGE + this.state.company_cover
               }
               thumbnail
               style={{ width: "100%", height: "300px" }}

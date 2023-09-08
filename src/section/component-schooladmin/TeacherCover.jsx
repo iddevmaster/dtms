@@ -33,8 +33,7 @@ export default class TeacherCover extends Component {
     try {
       await axios
         .post(
-          Common.API_URL +
-            `general/upload/profile?school_id=${this.state.school_id}`,
+          Common.API_URL + `media/upload/image?resize=1`,
           formdata,
           Common.options
         )
@@ -113,7 +112,7 @@ export default class TeacherCover extends Component {
     try {
       axios
         .delete(
-          Common.API_URL + `general/remove/?file_path=${cover}`,
+          Common.API_URL + `media/remove/?file_path=${cover}`,
           Common.options
         )
         .then((res) => {

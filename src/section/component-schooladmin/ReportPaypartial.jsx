@@ -183,7 +183,7 @@ export default class PaymentRegister extends Component {
         <Card border="info">
           <Card.Body>
             <Row>
-              <Col sm={6}>จำนวนข้อมูล {param.total_data} เรคคอร์ด</Col>
+              <Col sm={6}>จำนวนข้อมูล {param.total_data} รายการ</Col>
               <Col>
                 <Select
                   id="branch_id"

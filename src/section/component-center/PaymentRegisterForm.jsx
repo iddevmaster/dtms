@@ -1,13 +1,15 @@
 import React, { Component, Suspense } from "react";
 import { useParams } from "react-router-dom";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Table from "react-bootstrap/Table";
-import Card from "react-bootstrap/Card";
-import Alert from "react-bootstrap/Alert";
+import {
+  Row,
+  Col,
+  Breadcrumb,
+  Form,
+  Button,
+  Table,
+  Card,
+  Alert,
+} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Common from "../../common";
 import Functions from "../../functions";

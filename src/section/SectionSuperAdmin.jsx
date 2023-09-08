@@ -1,13 +1,8 @@
 import React, { Component } from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Navbar from "react-bootstrap/Navbar";
+import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
 import SchoolList from "./component-superadmin/SchoolList";
-import SchoolAddForm from "./component-superadmin/SchoolAddForm";
-import SchoolUpdateForm from "./component-superadmin/SchoolUpdateForm";
+import CompanyList from "./component-superadmin/CompanyList";
 import SchoolUserAdmin from "./component-superadmin/SchoolUserAdmin";
 import Subject from "./component-center/Subject";
 import Course from "./component-superadmin/Course";
@@ -72,10 +67,10 @@ export default class SectionSuperAdmin extends Component {
             <Routes>
               <Route path="/" element={<SchoolList />} />
               <Route path="/school" element={<SchoolList />} />
-              <Route path="/school/addform" element={<SchoolAddForm />} />
+
               <Route
-                path="/school/updateform/:school_id"
-                element={<SchoolUpdateForm />}
+                path="/company/form/:school_id"
+                element={<CompanyList />}
               />
               <Route path="/school/useradmin" element={<SchoolUserAdmin />} />
               <Route path="/subject" element={<Subject />} />

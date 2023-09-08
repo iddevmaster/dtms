@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Navbar from "react-bootstrap/Navbar";
+import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
+
 import ErrorPage from "./ErrorPage";
 import LogoutUser from "../landing-page/LogoutUser";
 import Register from "./component-schooladmin/Register";

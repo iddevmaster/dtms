@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import { useParams } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Card from "react-bootstrap/Card";
-import Alert from "react-bootstrap/Alert";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import InputGroup from "react-bootstrap/InputGroup";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  Card,
+  Alert,
+  Dropdown,
+  DropdownButton,
+  InputGroup,
+  Breadcrumb,
+} from "react-bootstrap";
 
 import Common from "../../common";
 import axios from "axios";
@@ -303,7 +305,7 @@ class StudentUpdate extends Component {
       axios
         .post(
           Common.API_URL +
-            `general/base64tofile?school_id=${this.state.school_id}`,
+            `media/base64tofile?school_id=${this.state.school_id}`,
           {
             file_name: file_name + ".png",
             file_path: file_path,
@@ -444,7 +446,7 @@ class StudentUpdate extends Component {
     try {
       await axios
         .post(
-          Common.API_URL + `general/upload/profile?school_id=${school_id}`,
+          Common.API_URL + `media/upload/image?resize=1`,
           formdata,
           Common.options
         )
@@ -469,7 +471,7 @@ class StudentUpdate extends Component {
     try {
       axios
         .delete(
-          Common.API_URL + `general/remove/?file_path=${cover}`,
+          Common.API_URL + `media/remove/?file_path=${cover}`,
           Common.options
         )
         .then((res) => {
@@ -515,27 +517,27 @@ class StudentUpdate extends Component {
     this.refrehData();
   }
   render() {
-    const { list_location } = this.state;
-    const { list_country } = this.state;
-    const { list_nationality } = this.state;
+    const {
+      list_location,
+      list_country,
+      list_nationality,
+      image_cover,
+      msg,
+      filecore,
+      student_prefix,
+      student_firstname,
+      student_lastname,
+      student_id_number,
+      student_birthday,
+      student_gender,
+      student_mobile,
+      student_email,
+      student_address,
+      defaultLocation,
+      defaultCountry,
+      defaultNationality,
+    } = this.state;
 
-    const { image_cover } = this.state;
-    const { msg } = this.state;
-    const { filecore } = this.state;
-
-    const { student_prefix } = this.state;
-    const { student_firstname } = this.state;
-    const { student_lastname } = this.state;
-    const { student_id_number } = this.state;
-    const { student_birthday } = this.state;
-    const { student_gender } = this.state;
-    const { student_mobile } = this.state;
-    const { student_email } = this.state;
-    const { student_address } = this.state;
-    const { defaultLocation } = this.state;
-    const { defaultCountry } = this.state;
-    const { defaultNationality } = this.state;
-    // const { data_idcard } = this.state;
     return (
       <div>
         <Row>

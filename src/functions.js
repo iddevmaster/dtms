@@ -43,6 +43,20 @@ exports.user_type_format = (value) => {
   return typeformat;
 };
 
+exports.check_empty_value = (value) => {
+  if (value === undefined) {
+    return true;
+  } else if (value === null) {
+    return true;
+  } else if (value === "") {
+    return true;
+  } else if (value.length < 1) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 exports.register_status_format = (value) => {
   let typeformat;
   if (value === "NR") {

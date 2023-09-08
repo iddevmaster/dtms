@@ -379,7 +379,7 @@ export default class CourseSeminarForm extends Component {
           </Card.Header>
           <Card.Body>
             <Row>
-              <Col sm={10}>จำนวนข้อมูล {data.length} เรคคอร์ด</Col>
+              <Col sm={10}>จำนวนข้อมูล {data.length} รายการ</Col>
               <Col sm={2}>
                 <Select
                   options={list_branch}

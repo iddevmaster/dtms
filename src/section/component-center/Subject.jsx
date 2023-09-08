@@ -1,17 +1,20 @@
 import React, { Component } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Modal from "react-bootstrap/Modal";
-import Table from "react-bootstrap/Table";
-import Alert from "react-bootstrap/Alert";
+import {
+  Row,
+  Col,
+  Breadcrumb,
+  Card,
+  Button,
+  ButtonGroup,
+  Dropdown,
+  DropdownButton,
+  Form,
+  InputGroup,
+  Modal,
+  Table,
+  Alert,
+} from "react-bootstrap";
+
 import { LinkContainer } from "react-router-bootstrap";
 import Functions from "../../functions";
 import Common from "../../common";
@@ -189,21 +192,23 @@ export default class Subject extends Component {
   }
 
   render() {
-    const { subject_id } = this.state;
-    const { subject_code } = this.state;
-    const { subject_name } = this.state;
-    const { subject_type } = this.state;
-    const { subject_learn_type } = this.state;
-    const { vehicle_type_id } = this.state;
-    const { active } = this.state;
+    const {
+      subject_id,
+      subject_code,
+      subject_name,
+      subject_type,
+      subject_learn_type,
+      vehicle_type_id,
+      active,
+      data,
+      vt,
+      isOpenModal,
+      isOpenModalDelete,
+      msg,
+      page,
+      param,
+    } = this.state;
 
-    const { data } = this.state;
-    const { vt } = this.state;
-    const { param } = this.state;
-    const { isOpenModal } = this.state;
-    const { isOpenModalDelete } = this.state;
-    const { msg } = this.state;
-    const { page } = this.state;
     return (
       <div>
         <Row>
@@ -241,7 +246,7 @@ export default class Subject extends Component {
           </Card.Header>
           <Card.Body>
             <Row>
-              <Col sm={9}>จำนวนข้อมูล {param.total_data} เรคคอร์ด</Col>
+              <Col sm={9}>จำนวนข้อมูล {param.total_data} รายการ</Col>
               <Col sm={3}>
                 <Form.Control
                   type="text"
