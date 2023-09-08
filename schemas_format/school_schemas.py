@@ -1,9 +1,6 @@
 from datetime import datetime
-from typing import Optional, List
-
+from typing import Optional
 from pydantic import BaseModel
-
-# User
 
 
 class SchoolRequestInSchema(BaseModel):
@@ -102,6 +99,8 @@ class CompanyRequestOutSchema(BaseModel):
     company_email: Optional[str] = None
     company_cover: Optional[str] = None
     active: Optional[int] = None
+    create_date: Optional[datetime] = None
+    update_date: Optional[datetime] = None
     location_id: Optional[int] = None
     school_id: Optional[str] = None
     location_company: object

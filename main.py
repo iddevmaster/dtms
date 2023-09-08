@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 import models
 from database import engine
 from routes.routes_course import router_course
-from routes.routes_general import router_general
+from routes.routes_media import routes_media
 from routes.routes_masterdata import router_masterdata
 from routes.routes_register import router_register
 from routes.routes_school import router_school
@@ -57,6 +57,6 @@ app.include_router(router_school, prefix="/school", tags=["School"])
 app.include_router(router_course, prefix="/course", tags=["Course"])
 app.include_router(router_teacher, prefix="/teacher", tags=["Teacher"])
 app.include_router(router_register, prefix="/register", tags=["Register"])
-app.include_router(router_general, prefix="/general", tags=["General"])
+app.include_router(routes_media, prefix="/media", tags=["Media"])
 app.include_router(router_masterdata, prefix="/masterdata",
                    tags=["Masterdata"])

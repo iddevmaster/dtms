@@ -95,7 +95,8 @@ async def get_school(request: FilterRequestSchema, db: Session = Depends(get_db)
             search_value), School.school_address.contains(search_value), School.school_phone.contains(search_value), School.school_tax.contains(search_value)))
 
     total_filter_data = result.count()
-    result = result.offset(skip).limit(limit).all()
+    result = result.order_by(desc(School.create_date)
+                             ).offset(skip).limit(limit).all()
     total_page = ceil(total_data / request.per_page)
     content = [SchoolRequestOutSchema.from_orm(p) for p in result]
     return ResponseData(status="success", status_code="200", message="Success fetch all data", page=request.page, per_page=limit, total_page=total_page, total_data=total_data, total_filter_data=total_filter_data, data=content)
@@ -116,6 +117,15 @@ async def delete_school(school_id: str, db: Session = Depends(get_db), authentic
 
 @router_school.post("/branch/create", response_model=BranchRequestOutSchema)
 async def create_branch(request: BranchRequestInSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+    _school = db.query(School).filter(
+        School.school_id == request.school_id).one_or_none()
+    if not _school:
+        raise HTTPException(status_code=404, detail="Data not found")
+    school_branch_amount = _school.school_branch_amount
+    _total_branch = db.query(Branch).filter(
+        Branch.school_id == request.school_id, Branch.cancelled == 1).count()
+    if _total_branch >= school_branch_amount:
+        raise HTTPException(status_code=404, detail="Data not found")
     _branch = Branch(
         branch_code=request.branch_code,
         branch_name=request.branch_name,
@@ -232,7 +242,7 @@ async def update_company(company_id: str, request: CompanyRequestInSchema, db: S
     _company.company_phone = request.company_phone
     _company.company_email = request.company_email
     _company.company_cover = request.company_cover
-    _company.company_cover = request.company_cover
+    _company.active = request.active
     _company.update_date = todaytime()
     _company.location_id = request.location_id
     _company.school_id = request.school_id
@@ -251,7 +261,7 @@ async def get_by_company_id(company_id: str,  db: Session = Depends(get_db), aut
 
 
 @router_school.delete("/company/{company_id}")
-async def delete_company(company_id: int, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+async def delete_company(company_id: str, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
     _company = db.query(Company).filter(
         Company.company_id == company_id).one_or_none()
     if not _company:
@@ -264,5 +274,5 @@ async def delete_company(company_id: int, db: Session = Depends(get_db), authent
 @router_school.get("/company/all/{school_id}", response_model=List[CompanyRequestOutSchema])
 async def get_company_all(school_id: str,  db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
     _company = db.query(Company).filter(
-        Company.school_id == school_id).all()
+        Company.school_id == school_id, Company.cancelled == 1).all()
     return _company

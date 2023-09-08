@@ -3,7 +3,7 @@ import base64
 import os
 import secrets
 from pathlib import Path
-
+from starlette.requests import Request
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -16,10 +16,10 @@ from data_common import base_system_url
 from database import get_db
 from function import create_directory
 
-router_general = APIRouter()
+routes_media = APIRouter()
 
 # static file setup config
-router_general.mount("/static", StaticFiles(directory="static"), name="static")
+routes_media.mount("/static", StaticFiles(directory="static"), name="static")
 path = "static/"
 
 
@@ -32,10 +32,10 @@ class base64File(BaseModel):
     file_name: str
 
 
-@router_general.post("/upload/profile")
-async def create_upload(school_id: str, file: UploadFile = File(...), authenticated: bool = Depends(auth_request)):
+@routes_media.post("/upload/image")
+async def create_upload_image(request: Request, resize: int = 0, file: UploadFile = File(...), authenticated: bool = Depends(auth_request)):
     # FILEPATH = "./static/images/"
-    FILEPATH = create_directory("static/" + school_id + "/")
+    FILEPATH = create_directory("static/photos/")
     filename = file.filename
     # extension = filename.split(".")[1]
     extension = filename.split(".").pop()
@@ -43,7 +43,7 @@ async def create_upload(school_id: str, file: UploadFile = File(...), authentica
         raise HTTPException(
             status_code=404, detail="File extention not allowed")
 
-    token_name = secrets.token_hex(10)+"."+extension
+    token_name = secrets.token_hex(10) + "." + extension
     generated_name = FILEPATH + token_name
 
     file_content = await file.read()
@@ -51,17 +51,20 @@ async def create_upload(school_id: str, file: UploadFile = File(...), authentica
         file.write(file_content)
     # PILLOW
     img = Image.open(generated_name)
-    img = img.resize(size=(200, 200))
+    if resize > 0:
+        img = img.resize(size=(200, 200))
     img.save(generated_name)
 
     file.close()
     # ตัด static ออกเพื่อให้ url ภายนอกปลอดภัยยิ่งขึ้น
+    base_system_url = request.base_url._url
     use_path = str(generated_name.strip("static/"))
-    file_path = base_system_url + "general/render/?file_path=" + use_path
+
+    file_path = base_system_url + "media/render/?file_path=" + use_path
     return {'file_name': token_name, 'file_path': use_path, "file_url": file_path}
 
 
-@router_general.get("/render/")
+@routes_media.get("/render/")
 async def get_file(file_path: str):
     use = os.path.join(path, file_path)
     if os.path.exists(use):
@@ -69,7 +72,7 @@ async def get_file(file_path: str):
     return {'message': 'File not found!'}
 
 
-@router_general.delete("/remove/")
+@routes_media.delete("/remove/")
 async def delete_file(file_path: str, authenticated: bool = Depends(auth_request)):
     use = os.path.join(path, file_path)
     if os.path.exists(use):
@@ -81,7 +84,7 @@ async def delete_file(file_path: str, authenticated: bool = Depends(auth_request
         return {'message': 'The file does not exist'}
 
 
-@router_general.post("/base64tofile/")
+@routes_media.post("/base64tofile/")
 async def create_file(school_id: str, request: base64File):
     FILEPATH = create_directory("static/" + school_id + "/")
     file_name = request.file_name
