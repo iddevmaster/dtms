@@ -353,6 +353,27 @@ class Seminar(Base):
     course_seminar = relationship("Course", back_populates="seminar_course")
 
 
+class VehicleData(Base):
+    __tablename__ = 'app_vehicle'
+    vehicle_id = Column(Integer, primary_key=True)
+    vehicle_brand = Column(String(128), nullable=False)
+    vehicle_license_plate = Column(String(128), nullable=False)
+    vehicle_use_date = Column(Date)
+    vehicle_expiry = Column(Date)
+    vehicle_cover = Column(String(128), nullable=False)
+    vehicle_description = Column(String(256), nullable=False)
+    active = Column(Integer, default=1)
+    cancelled = Column(Integer, default=1)
+    create_date = Column(DateTime)
+    update_date = Column(DateTime)
+    province_code = Column(String(128), nullable=False)
+    branch_id = Column(String(128), ForeignKey(
+        "app_branch.branch_id", ondelete="CASCADE"))
+    school_id = Column(String(128), ForeignKey(
+        "app_school.school_id", ondelete="CASCADE"))
+
+    vehicle_province = relationship("LocationThai", backref="app_location_thai", uselist=False,
+                                    primaryjoin='VehicleData.province_code == LocationThai.province_code', foreign_keys=province_code)
 # ed_staff_type 1= ประธาน , 2 = กรรมการ
 # ed_status 0 = ยังสามารถแก้ไขได้ , 1 = ยืนยันการนำไปใช้
 

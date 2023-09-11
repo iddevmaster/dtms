@@ -41,7 +41,7 @@ def create_teacher(request: TeacherRequestInSchema, db: Session = Depends(get_db
     return ResponseProcess(status="success", status_code="200", message="Success created data")
 
 
-@router_teacher.post("/{school_id}/all", )
+@router_teacher.post("/{school_id}/all")
 def get_teacher(request: FilterRequestSchema, school_id: str, branch_id: str = "all",  db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
     skip = ternaryZero(((request.page - 1) * request.per_page))
     limit = rows_limit(request.per_page)
@@ -84,12 +84,12 @@ def update_teacher(teacher_id: str, request: TeacherRequestInSchema,  db: Sessio
     _teacher.teacher_firstname = request.teacher_firstname
     _teacher.teacher_lastname = request.teacher_lastname
     _teacher.teacher_id_number = request.teacher_id_number
-    _teacher.teacher_gender = request.teacher_gender,
+    _teacher.teacher_gender = request.teacher_gender
     _teacher.teacher_phone = request.teacher_phone
     _teacher.teacher_email = request.teacher_email
     _teacher.teacher_cover = request.teacher_cover
     _teacher.active = request.active
-    _teacher.update_date = todaytime(),
+    _teacher.update_date = todaytime()
     _teacher.branch_id = request.branch_id
     _teacher.school_id = request.school_id
 

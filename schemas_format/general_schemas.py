@@ -2,7 +2,7 @@ from datetime import date, datetime, time
 from typing import Generic, Optional, TypeVar, List
 from pydantic.generics import GenericModel
 from pydantic import BaseModel
-
+from schemas_format.master_data_schemas import ProvinceRequestOutSchema
 T = TypeVar('T')
 
 
@@ -48,6 +48,43 @@ class fullcalendarTypeBOutSchema(BaseModel):
     start: Optional[date] = None
     end: Optional[date] = None
     backgroundColor: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class VehicleDataRequestInSchema(BaseModel):
+    vehicle_brand: Optional[str] = None
+    vehicle_license_plate: Optional[str] = None
+    vehicle_use_date: Optional[date] = None
+    vehicle_expiry: Optional[date] = None
+    vehicle_cover: Optional[str] = None
+    vehicle_description: Optional[str] = None
+    active: Optional[int] = None
+    province_code: Optional[str] = None
+    branch_id: Optional[str] = None
+    school_id: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class VehicleDataRequestOutSchema(BaseModel):
+    vehicle_id: Optional[int] = None
+    vehicle_brand: Optional[str] = None
+    vehicle_license_plate: Optional[str] = None
+    vehicle_use_date: Optional[date] = None
+    vehicle_expiry: Optional[date] = None
+    vehicle_cover: Optional[str] = None
+    vehicle_description: Optional[str] = None
+    active: Optional[int] = None
+    cancelled: Optional[int] = None
+    create_date: Optional[datetime] = None
+    update_date: Optional[datetime] = None
+    province_code: Optional[str] = None
+    branch_id: Optional[str] = None
+    school_id: Optional[str] = None
+    vehicle_province: ProvinceRequestOutSchema
 
     class Config:
         orm_mode = True
