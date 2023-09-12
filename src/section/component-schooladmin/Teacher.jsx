@@ -1,24 +1,25 @@
 import React, { Component } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import InputGroup from "react-bootstrap/InputGroup";
-import Form from "react-bootstrap/Form";
-
-import Modal from "react-bootstrap/Modal";
-import Table from "react-bootstrap/Table";
-import Alert from "react-bootstrap/Alert";
+import {
+  Row,
+  Col,
+  Breadcrumb,
+  Card,
+  Button,
+  ButtonGroup,
+  Dropdown,
+  DropdownButton,
+  InputGroup,
+  Form,
+  Modal,
+  Table,
+  Alert,
+} from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Functions from "../../functions";
 import Common from "../../common";
 import EmptyImage from "../../asset/images/profile.png";
 import axios from "axios";
-const list_prefix = Functions.prefix;
+const list_prefix = Common.prefix;
 const BASE_IMAGE = Common.IMAGE_URL;
 const school_id = Common.getUserLoginData.school_id;
 export default class Teacher extends Component {
@@ -248,24 +249,25 @@ export default class Teacher extends Component {
   }
 
   render() {
-    const { teacher_id } = this.state;
-    const { teacher_prefix } = this.state;
-    const { teacher_firstname } = this.state;
-    const { teacher_lastname } = this.state;
-    const { teacher_gender } = this.state;
-    const { teacher_id_number } = this.state;
-    const { teacher_phone } = this.state;
-    const { teacher_email } = this.state;
-    const { branch_id } = this.state;
-    const { active } = this.state;
-
-    const { data } = this.state;
-    const { param } = this.state;
-    const { branch } = this.state;
-    const { isOpenModal } = this.state;
-    const { isOpenModalDelete } = this.state;
-    const { msg } = this.state;
-    const { page } = this.state;
+    const {
+      teacher_id,
+      teacher_prefix,
+      teacher_firstname,
+      teacher_lastname,
+      teacher_gender,
+      teacher_id_number,
+      teacher_phone,
+      teacher_email,
+      branch_id,
+      active,
+      data,
+      param,
+      branch,
+      isOpenModal,
+      isOpenModalDelete,
+      msg,
+      page,
+    } = this.state;
 
     return (
       <div>

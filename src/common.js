@@ -37,4 +37,20 @@ exports.customSelectStyles = {
     minHeight: 47,
   }),
 };
+exports.course_group = [
+  "เรียนขับรถและสอบใบอนุญาตฯ",
+  "เรียนขับรถ แต่ไม่สอบใบอนุญาตฯ",
+  "อบรมภาคทฤษฎี",
+];
+exports.subject_type = ["วิชาบังคับ", "วิชาเพิ่มเติม"];
+exports.subject_learn_type = ["ทฤษฏี", "ปฏิบัติ"];
+exports.prefix = ["นาย", "นาง", "นางสาว", "Mr.", "Mrs.", "Miss"];
+exports.vehicle_type = ["รถยนต์", "รถจักรยานยนต์"];
+exports.unit_type = ["รายชั่วโมง", "รายวัน", "รายเดือน", "รายคน"];
+exports.amount_type = ["สอน", "คุมสอบ", "กรรมการ", "ประธาน", "เงินเดือน"];
+exports.staff_exam_type = ["ประธาน", "กรรมการ"];
+exports.subject_learn_type = ["ทฤษฎี", "ปฏิบัติ"];
+exports.unit_type = ["รายชั่วโมง", "รายวัน", "รายเดือน", "รายคน"];
+exports.amount_type = ["สอน", "คุมสอบ", "กรรมการ", "ประธาน", "เงินเดือน"];
+
 export default exports;

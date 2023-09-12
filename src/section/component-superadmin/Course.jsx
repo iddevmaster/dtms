@@ -215,23 +215,23 @@ export default class Course extends Component {
   }
 
   render() {
-    const { course_id } = this.state;
-    const { course_code } = this.state;
-    const { course_name } = this.state;
-    const { course_theory_hour } = this.state;
-    const { course_practice_hour } = this.state;
-    const { course_group } = this.state;
-    const { vehicle_type_id } = this.state;
-    const { active } = this.state;
-
-    const { data } = this.state;
-    const { param } = this.state;
-    const { vt } = this.state;
-    const { isOpenModal } = this.state;
-    const { isOpenModalDelete } = this.state;
-
-    const { msg } = this.state;
-    const { page } = this.state;
+    const {
+      course_id,
+      course_code,
+      course_name,
+      course_theory_hour,
+      course_practice_hour,
+      course_group,
+      vehicle_type_id,
+      active,
+      data,
+      param,
+      vt,
+      isOpenModal,
+      isOpenModalDelete,
+      msg,
+      page,
+    } = this.state;
 
     return (
       <div>

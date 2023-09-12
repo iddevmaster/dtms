@@ -319,7 +319,7 @@ export default class User extends Component {
           </Card.Header>
           <Card.Body>
             <Row>
-              <Col sm={3}>จำนวนข้อมูล {param.total_data} รายการ</Col>
+              <Col sm={6}>จำนวนข้อมูล {param.total_data} รายการ</Col>
               <Col sm={3}>
                 <Select
                   id="branch_id"
@@ -331,14 +331,7 @@ export default class User extends Component {
                   cacheOptions
                 />
               </Col>
-              <Col sm={3}>
-                <Form.Select size="lg" onChange={this.setUser_type}>
-                  <option value="all">--ผู้ใช้งานทุกประเภท--</option>
-                  <option value="3">เจ้าหน้าที่โรงเรียน</option>
-                  <option value="4">ครู / วิทยากร</option>
-                  <option value="5">นักเรียน</option>
-                </Form.Select>
-              </Col>
+
               <Col sm={3}>
                 <Form.Control
                   type="text"
@@ -453,7 +446,7 @@ export default class User extends Component {
               </Col>
               <Col></Col>
             </Row>
-            <div>
+            {/* <div>
               คำชี้แจง{" "}
               <span style={{ color: "red" }}>
                 : ข้อมูลนักเรียนจะถูกเพิ่มอัตโนมัติหลังจากบันทึกผลการสมัคร
@@ -461,7 +454,7 @@ export default class User extends Component {
                 จะเพิ่มอัตโนมัติหลังจากเพิ่มข้อมูลครูลงในแบบฟอร์ม
                 ข้อมูลในส่วนนี้จึงไม่สามารถแก้ไขได้
               </span>
-            </div>
+            </div> */}
           </Card.Body>
         </Card>
 

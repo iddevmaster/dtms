@@ -28,6 +28,7 @@ import IdCardManual from "./component-center/IdCardManual";
 import ReportPaypartial from "./component-schooladmin/ReportPaypartial";
 import ReportStudentLearnSuccess from "./component-schooladmin/ReportStudentLearnSuccess";
 import User from "./component-schooladmin/User";
+import Vehicle from "./component-schooladmin/Vehicle";
 import Common from "../common";
 const app_name = Common.app_name;
 const fullname = Common.getUserLoginData.full_name;
@@ -89,6 +90,7 @@ export default class SectionSchoolAdmin extends Component {
                 </NavDropdown>
                 <NavDropdown title="ข้อมูลทั่วไป" id="collasible-nav-dropdown">
                   <NavDropdown.Item href="#">โรงเรียน</NavDropdown.Item>
+                  <NavDropdown.Item href="/vehicle">ยานพาหนะ</NavDropdown.Item>
                   <NavDropdown.Item href="/branch">สาขา</NavDropdown.Item>
                   <NavDropdown.Item href="/user">ผู้ใช้งาน</NavDropdown.Item>
                   <NavDropdown.Item href="/idcardmanual">
@@ -169,6 +171,7 @@ export default class SectionSchoolAdmin extends Component {
                 path="/report/learn/success/:rm_success"
                 element={<ReportStudentLearnSuccess />}
               />
+              <Route path="/vehicle" element={<Vehicle />} />
               <Route path="/branch" element={<Branch />} />
               <Route path="/user" element={<User />} />
               <Route path="/idcardmanual" element={<IdCardManual />} />

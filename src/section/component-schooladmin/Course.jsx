@@ -1,20 +1,23 @@
 import React, { Component } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Breadcrumb from "react-bootstrap/Breadcrumb";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Tooltip from "react-bootstrap/Tooltip";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import {
+  Row,
+  Col,
+  Breadcrumb,
+  Card,
+  Button,
+  ButtonGroup,
+  Dropdown,
+  DropdownButton,
+  Form,
+  InputGroup,
+  Tooltip,
+  OverlayTrigger,
+  Modal,
+  Table,
+  Alert,
+} from "react-bootstrap";
+
 import Select from "react-select";
-import Modal from "react-bootstrap/Modal";
-import Table from "react-bootstrap/Table";
-import Alert from "react-bootstrap/Alert";
 import { LinkContainer } from "react-router-bootstrap";
 import Functions from "../../functions";
 import Common from "../../common";
@@ -351,27 +354,27 @@ export default class Course extends Component {
   }
 
   render() {
-    const { course_id } = this.state;
-    const { course_code } = this.state;
-    const { course_name } = this.state;
-    const { course_theory_hour } = this.state;
-    const { course_practice_hour } = this.state;
-    const { course_group } = this.state;
-    const { vehicle_type_id } = this.state;
-    const { active } = this.state;
-
-    const { data } = this.state;
-    const { param } = this.state;
-    const { vt } = this.state;
-    const { isOpenModal } = this.state;
-    const { isOpenModalDelete } = this.state;
-    const { isOpenModalPrice } = this.state;
-
-    const { msg } = this.state;
-    const { page } = this.state;
-    const { defaultBranch } = this.state;
-    const { list_branch } = this.state;
-    const { list_course_price } = this.state;
+    const {
+      course_id,
+      course_code,
+      course_name,
+      course_theory_hour,
+      course_practice_hour,
+      course_group,
+      vehicle_type_id,
+      active,
+      data,
+      param,
+      vt,
+      isOpenModal,
+      isOpenModalDelete,
+      isOpenModalPrice,
+      msg,
+      page,
+      defaultBranch,
+      list_branch,
+      list_course_price,
+    } = this.state;
 
     return (
       <div>

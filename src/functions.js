@@ -1,16 +1,17 @@
 const exports = {};
-exports.course_group = [
-  "เรียนขับรถและสอบใบอนุญาตฯ",
-  "เรียนขับรถ แต่ไม่สอบใบอนุญาตฯ",
-  "อบรมภาคทฤษฎี",
-];
-exports.subject_type = ["วิชาบังคับ", "วิชาเพิ่มเติม"];
-exports.subject_learn_type = ["ทฤษฏี", "ปฏิบัติ"];
-exports.prefix = ["นาย", "นาง", "นางสาว", "Mr.", "Mrs.", "Miss"];
-exports.vehicle_type = ["รถยนต์", "รถจักรยานยนต์"];
-exports.unit_type = ["รายชั่วโมง", "รายวัน", "รายเดือน", "รายคน"];
-exports.amount_type = ["สอน", "คุมสอบ", "กรรมการ", "ประธาน", "เงินเดือน"];
-exports.staff_exam_type = ["ประธาน", "กรรมการ"];
+
+exports.vehicle_format = (value) => {
+  let typeformat;
+  if (value === 1) {
+    typeformat = "รถยนต์";
+  } else if (value === 2) {
+    typeformat = "รถจักรยานยนต์";
+  } else {
+    typeformat = "-";
+  }
+  return typeformat;
+};
+
 exports.pay_status_format = (value) => {
   let typeformat;
   if (value === "RS") {
@@ -229,9 +230,6 @@ exports.months_th_mini = [
   "พ.ย.",
   "ธ.ค.",
 ];
-exports.subject_learn_type = ["ทฤษฎี", "ปฏิบัติ"];
-exports.unit_type = ["รายชั่วโมง", "รายวัน", "รายเดือน", "รายคน"];
-exports.amount_type = ["สอน", "คุมสอบ", "กรรมการ", "ประธาน", "เงินเดือน"];
 
 exports.get_year = (start_year) => {
   let result = [];
