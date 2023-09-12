@@ -130,6 +130,8 @@ class Branch(Base):
         "RegisterCoreMain", back_populates="branch_regisetmain_core")
     course_price_branch = relationship(
         "CoursePrice", back_populates="branch_course_price")
+    vehicle_branch = relationship(
+        "VehicleData", back_populates="branch_vehicle")
 
 
 class Company(Base):
@@ -362,6 +364,7 @@ class VehicleData(Base):
     vehicle_expiry = Column(Date)
     vehicle_cover = Column(String(128), nullable=False)
     vehicle_description = Column(String(256), nullable=False)
+    vehicle_type_id = Column(Integer, nullable=False)
     active = Column(Integer, default=1)
     cancelled = Column(Integer, default=1)
     create_date = Column(DateTime)
@@ -372,8 +375,10 @@ class VehicleData(Base):
     school_id = Column(String(128), ForeignKey(
         "app_school.school_id", ondelete="CASCADE"))
 
-    vehicle_province = relationship("LocationThai", backref="app_location_thai", uselist=False,
+    province_vehicle = relationship("LocationThai", backref="app_location_thai", uselist=False,
                                     primaryjoin='VehicleData.province_code == LocationThai.province_code', foreign_keys=province_code)
+    branch_vehicle = relationship("Branch", back_populates="vehicle_branch")
+
 # ed_staff_type 1= ประธาน , 2 = กรรมการ
 # ed_status 0 = ยังสามารถแก้ไขได้ , 1 = ยืนยันการนำไปใช้
 

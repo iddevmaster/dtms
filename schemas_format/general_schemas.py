@@ -3,6 +3,7 @@ from typing import Generic, Optional, TypeVar, List
 from pydantic.generics import GenericModel
 from pydantic import BaseModel
 from schemas_format.master_data_schemas import ProvinceRequestOutSchema
+from schemas_format.school_schemas import BranchRequestOutSchema
 T = TypeVar('T')
 
 
@@ -60,6 +61,7 @@ class VehicleDataRequestInSchema(BaseModel):
     vehicle_expiry: Optional[date] = None
     vehicle_cover: Optional[str] = None
     vehicle_description: Optional[str] = None
+    vehicle_type_id: Optional[int] = None
     active: Optional[int] = None
     province_code: Optional[str] = None
     branch_id: Optional[str] = None
@@ -77,6 +79,7 @@ class VehicleDataRequestOutSchema(BaseModel):
     vehicle_expiry: Optional[date] = None
     vehicle_cover: Optional[str] = None
     vehicle_description: Optional[str] = None
+    vehicle_type_id: Optional[int] = None
     active: Optional[int] = None
     cancelled: Optional[int] = None
     create_date: Optional[datetime] = None
@@ -84,7 +87,8 @@ class VehicleDataRequestOutSchema(BaseModel):
     province_code: Optional[str] = None
     branch_id: Optional[str] = None
     school_id: Optional[str] = None
-    vehicle_province: ProvinceRequestOutSchema
+    province_vehicle: ProvinceRequestOutSchema
+    branch_vehicle: BranchRequestOutSchema
 
     class Config:
         orm_mode = True

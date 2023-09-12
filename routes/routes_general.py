@@ -24,6 +24,7 @@ async def create_vehicle(request: VehicleDataRequestInSchema, db: Session = Depe
         vehicle_expiry=request.vehicle_expiry,
         vehicle_cover=request.vehicle_cover,
         vehicle_description=request.vehicle_description,
+        vehicle_type_id=request.vehicle_type_id,
         active=request.active,
         create_date=todaytime(),
         update_date=todaytime(),
@@ -49,6 +50,7 @@ def update_vehicle(vehicle_id: int, request: VehicleDataRequestInSchema,  db: Se
     _vehicle.vehicle_expiry = request.vehicle_expiry
     _vehicle.vehicle_cover = request.vehicle_cover
     _vehicle.vehicle_description = request.vehicle_description
+    _vehicle.vehicle_type_id = request.vehicle_type_id
     _vehicle.active = request.active
     _vehicle.update_date = todaytime()
     _vehicle.province_code = request.province_code
@@ -84,7 +86,7 @@ def get_by_vehicle_id(vehicle_id: int, db: Session = Depends(get_db), authentica
 
 
 @routes_general.post("/vehicle/{school_id}/all")
-def get_teacher(request: FilterRequestSchema, school_id: str, branch_id: str = "all",  db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
+def get_vehicle(request: FilterRequestSchema, school_id: str, branch_id: str = "all",  db: Session = Depends(get_db),  authenticated: bool = Depends(auth_request)):
     skip = ternaryZero(((request.page - 1) * request.per_page))
     limit = rows_limit(request.per_page)
     search_value = request.search_value
