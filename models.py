@@ -10,27 +10,6 @@ from sqlalchemy.ext.declarative import declarative_base
 Base: Any = declarative_base()
 
 
-class User(Base):
-    __tablename__ = 'app_user'
-    user_id = Column(String(128), primary_key=True,
-                     unique=True, default=generateId)
-    username = Column(String(128), index=True)
-    password = Column(String(128), nullable=True)
-    firstname = Column(String(128), nullable=True)
-    lastname = Column(String(128), nullable=True)
-    user_type = Column(Integer, default=0)
-    active = Column(Integer, default=1)
-    cancelled = Column(Integer, default=1)
-    create_date = Column(DateTime)
-    branch_id = Column(String(128), ForeignKey(
-        "app_branch.branch_id", ondelete="CASCADE"))
-    school_id = Column(String(128), ForeignKey(
-        "app_school.school_id", ondelete="CASCADE"))
-
-    branch_user = relationship("Branch", back_populates="user_branch")
-    school_user = relationship("School", back_populates="user_school")
-
-
 class Country(Base):
     __tablename__ = 'app_country'
     country_id = Column(Integer, primary_key=True)
@@ -58,11 +37,28 @@ class LocationThai(Base):
     location_student_core = relationship(
         "RegisterCoreStudent", back_populates="student_core_location")
     school_location = relationship("School", back_populates="location_school")
-    branch_location = relationship(
-        "Branch", back_populates="location_branch")
-    company_location = relationship(
-        "Company", back_populates="location_company")
 # user_type : 1 =Super Admin , 2 = School Admin, 3 = User ,4 = teacher , 5 = student
+
+
+class User(Base):
+    __tablename__ = 'app_user'
+    user_id = Column(String(128), primary_key=True,
+                     unique=True, default=generateId)
+    username = Column(String(128), index=True)
+    password = Column(String(128), nullable=True)
+    firstname = Column(String(128), nullable=True)
+    lastname = Column(String(128), nullable=True)
+    user_type = Column(Integer, default=0)
+    active = Column(Integer, default=1)
+    cancelled = Column(Integer, default=1)
+    create_date = Column(DateTime)
+    branch_id = Column(String(128), ForeignKey(
+        "app_branch.branch_id", ondelete="CASCADE"))
+    school_id = Column(String(128), ForeignKey(
+        "app_school.school_id", ondelete="CASCADE"))
+
+    branch_user = relationship("Branch", back_populates="user_branch")
+    school_user = relationship("School", back_populates="user_school")
 
 
 class School(Base):
@@ -72,11 +68,6 @@ class School(Base):
     school_name = Column(String(128), nullable=True)
     school_description = Column(String(256), nullable=True)
     school_address = Column(String(256), nullable=True)
-    school_phone = Column(String(48), nullable=True)
-    school_email = Column(String(48), nullable=True)
-    school_tax = Column(String(48), nullable=True)
-    school_branch_amount = Column(Integer, nullable=True)
-    school_cover = Column(String(128), nullable=True)
     location_id = Column(Integer, ForeignKey(
         "app_location_thai.location_id", ondelete="CASCADE"), nullable=True)
     active = Column(Integer, default=1)
@@ -104,21 +95,13 @@ class Branch(Base):
                        unique=True, default=generateShortId)
     branch_code = Column(String(128), nullable=False)
     branch_name = Column(String(128), nullable=False)
-    branch_description = Column(String(256), nullable=True)
-    branch_address = Column(String(256), nullable=True)
-    branch_phone = Column(String(48), nullable=True)
-    branch_email = Column(String(48), nullable=True)
     active = Column(Integer, default=1)
     cancelled = Column(Integer, default=1)
     create_date = Column(DateTime)
     update_date = Column(DateTime)
-    location_id = Column(Integer, ForeignKey(
-        "app_location_thai.location_id", ondelete="CASCADE"), nullable=True)
     school_id = Column(String(128), ForeignKey(
         "app_school.school_id", ondelete="CASCADE"))
 
-    location_branch = relationship(
-        "LocationThai", back_populates="branch_location")
     user_branch = relationship("User", back_populates="branch_user")
     teacher_branch = relationship("Teacher", back_populates="branch_teacher")
     seminar_branch = relationship("Seminar", back_populates="branch_seminar")
@@ -130,34 +113,6 @@ class Branch(Base):
         "RegisterCoreMain", back_populates="branch_regisetmain_core")
     course_price_branch = relationship(
         "CoursePrice", back_populates="branch_course_price")
-    vehicle_branch = relationship(
-        "VehicleData", back_populates="branch_vehicle")
-
-
-class Company(Base):
-    __tablename__ = 'app_company'
-    company_id = Column(String(128), primary_key=True,
-                        unique=True, default=generateShortId)
-    company_name = Column(String(128), nullable=False)
-    company_tax = Column(String(48), nullable=True)
-    company_description = Column(String(256), nullable=True)
-    company_address = Column(String(256), nullable=True)
-    company_phone = Column(String(48), nullable=True)
-    company_email = Column(String(48), nullable=True)
-    company_cover = Column(String(128), nullable=True)
-    active = Column(Integer, default=1)
-    cancelled = Column(Integer, default=1)
-    create_date = Column(DateTime)
-    update_date = Column(DateTime)
-    location_id = Column(Integer, ForeignKey(
-        "app_location_thai.location_id", ondelete="CASCADE"), nullable=True)
-    school_id = Column(String(128), ForeignKey(
-        "app_school.school_id", ondelete="CASCADE"))
-
-    location_company = relationship(
-        "LocationThai", back_populates="company_location")
-
-
 # subject_type 1 = วิชาบังคับ , 2 =วิชาเพิ่มเติม
 # subject_learn_type 1 = ทฤษฏี , 2 =ปฏิบัติ
 
@@ -354,30 +309,6 @@ class Seminar(Base):
     school_seminar = relationship("School", back_populates="seminar_school")
     course_seminar = relationship("Course", back_populates="seminar_course")
 
-
-class VehicleData(Base):
-    __tablename__ = 'app_vehicle'
-    vehicle_id = Column(Integer, primary_key=True)
-    vehicle_brand = Column(String(128), nullable=False)
-    vehicle_license_plate = Column(String(128), nullable=False)
-    vehicle_use_date = Column(Date)
-    vehicle_expiry = Column(Date)
-    vehicle_cover = Column(String(128), nullable=False)
-    vehicle_description = Column(String(256), nullable=False)
-    vehicle_type_id = Column(Integer, nullable=False)
-    active = Column(Integer, default=1)
-    cancelled = Column(Integer, default=1)
-    create_date = Column(DateTime)
-    update_date = Column(DateTime)
-    province_code = Column(String(128), nullable=False)
-    branch_id = Column(String(128), ForeignKey(
-        "app_branch.branch_id", ondelete="CASCADE"))
-    school_id = Column(String(128), ForeignKey(
-        "app_school.school_id", ondelete="CASCADE"))
-
-    province_vehicle = relationship("LocationThai", backref="app_location_thai", uselist=False,
-                                    primaryjoin='VehicleData.province_code == LocationThai.province_code', foreign_keys=province_code)
-    branch_vehicle = relationship("Branch", back_populates="vehicle_branch")
 
 # ed_staff_type 1= ประธาน , 2 = กรรมการ
 # ed_status 0 = ยังสามารถแก้ไขได้ , 1 = ยืนยันการนำไปใช้

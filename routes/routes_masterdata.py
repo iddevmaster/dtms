@@ -1,9 +1,9 @@
-from typing import Optional, List
+from typing import Optional
 
 import requests
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from sqlalchemy import and_,  or_, asc, func
+from sqlalchemy import and_,  or_
 from sqlalchemy.orm import Session
 
 from authen import auth_request
@@ -12,8 +12,9 @@ from data_common import (base_branch_id, base_school_id, course_group,
 from database import get_db
 from function import ceil, ternaryZero, todaytime, rows_limit
 from models import Branch, Country, ExamDate, LocationThai, School
-from schemas_format.general_schemas import (FilterRequestSchema, ResponseData)
-from schemas_format.master_data_schemas import ProvinceRequestOutSchema
+from schemas_format.general_schemas import (FilterRequestSchema,
+                                            ResponseData)
+
 router_masterdata = APIRouter()
 
 
@@ -24,7 +25,7 @@ class locationFilter(BaseModel):
 
 
 @router_masterdata.get("/install_default_data")
-def install_default_data(db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+def install_default_data(db: Session = Depends(get_db)):
     # ข้อมูลประเทศ
     total_country = db.query(Country).count()
     status_country = False
@@ -157,7 +158,7 @@ def general_vehicle_type():
 
 
 @router_masterdata.post("/location")
-def general_location(request: FilterRequestSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+def general_location(request: FilterRequestSchema, db: Session = Depends(get_db)):
     skip = ternaryZero(((request.page - 1) * request.per_page))
     limit = rows_limit(request.per_page)
     search_value = request.search_value
@@ -177,16 +178,8 @@ def general_location(request: FilterRequestSchema, db: Session = Depends(get_db)
     return ResponseData(status="success", status_code="200", message="Success fetch all data", page=request.page, per_page=limit, total_page=total_page, total_data=total_data, total_filter_data=total_filter_data, data=_location)
 
 
-@router_masterdata.get("/province", response_model=List[ProvinceRequestOutSchema])
-async def get_province(db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
-    _content = db.query(LocationThai.province_code, LocationThai.province_name).order_by(
-        asc(LocationThai.province_code)).group_by(
-        LocationThai.province_code, LocationThai.province_name).all()
-    return _content
-
-
 @router_masterdata.post("/country")
-def general_country(request: FilterRequestSchema, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+def general_country(request: FilterRequestSchema, db: Session = Depends(get_db)):
     skip = ternaryZero(((request.page - 1) * request.per_page))
     limit = rows_limit(request.per_page)
     search_value = request.search_value
@@ -209,7 +202,7 @@ def general_country(request: FilterRequestSchema, db: Session = Depends(get_db),
 
 
 @router_masterdata.post("/location/filter")
-def general_location_filter(request: locationFilter, db: Session = Depends(get_db), authenticated: bool = Depends(auth_request)):
+def general_location_filter(request: locationFilter, db: Session = Depends(get_db)):
     # ค้นหาปกติ
     _location = db.query(LocationThai).filter(
         and_(LocationThai.amphur_name.contains(request.amphur_name),
