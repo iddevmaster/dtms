@@ -29,7 +29,6 @@ class UserRequestOutSchema(BaseModel):
     lastname: Optional[str] = None
     user_type: Optional[int] = None
     active: Optional[int] = None
-    cancelled: Optional[int] = None
     create_date: Optional[datetime] = None
     branch_id: Optional[str] = None
     school_id: Optional[str] = None

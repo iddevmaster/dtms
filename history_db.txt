@@ -2,3 +2,20 @@ ALTER TABLE "public"."app_school"
   ADD COLUMN "school_description" varchar(256),
   ADD COLUMN "school_address" varchar(256),
   ADD COLUMN "location_id" int4;
+
+ 02/09/2023
+ ALTER TABLE "public"."app_school" 
+  ADD COLUMN "school_phone" varchar(48),
+  ADD COLUMN "school_email" varchar(48),
+  ADD COLUMN "school_tax" varchar(48),
+  ADD COLUMN "school_branch_amount" int4; 
+
+ 04/09/2023
+ ALTER TABLE "public"."app_branch" 
+  ADD COLUMN "branch_description" varchar(256),
+  ADD COLUMN "branch_address" varchar(256),
+  ADD COLUMN "branch_phone" varchar(48),
+  ADD COLUMN "branch_email" varchar(48),
+  ADD COLUMN "location_id" int4; 
+ALTER TABLE "public"."app_school" 
+  ADD COLUMN "school_cover" varchar(128);
