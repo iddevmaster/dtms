@@ -1,3 +1,5 @@
+import Common from './common'
+
 const exports = {};
 
 exports.vehicle_format = (value) => {
@@ -200,8 +202,9 @@ exports.format_date_time = (value) => {
 
 exports.vehicle_type_format = (value) => {
   let index = value - 1;
-  return exports.vehicle_type[index];
+  return Common.vehicle_type[index];
 };
+
 exports.months = [
   "มกราคม",
   "กุมภาพันธ์",

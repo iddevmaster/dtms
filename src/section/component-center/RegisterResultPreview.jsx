@@ -184,7 +184,7 @@ export default class RegisterResultPreview extends Component {
                   {main.course_regisetmain_tmp.course_code}{" "}
                   {main.course_regisetmain_tmp.course_name}
                 </td>
-                <td>{Functions.vehicle_type[main.vehicle_type_id - 1]}</td>
+                <td>{Common.vehicle_type[main.vehicle_type_id - 1]}</td>
                 <td>
                   {main.ed_id !== 1 && (
                     <span>
@@ -268,7 +268,7 @@ export default class RegisterResultPreview extends Component {
                     {rs.subject_rts.subject_code} {rs.subject_rts.subject_name}
                   </td>
                   <td align="center">
-                    {Functions.subject_learn_type[rs.subject_learn_type - 1]}
+                    {Common.subject_learn_type[rs.subject_learn_type - 1]}
                   </td>
                   <td align="center">
                     {Functions.format_date_time(rs.rs_start_time)}

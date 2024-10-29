@@ -10,9 +10,9 @@ import Alert from "react-bootstrap/Alert";
 import Common from "../../common";
 import Functions from "../../functions";
 import axios from "axios";
-const unit_type = Functions.unit_type;
-const subject_learn_type_list = Functions.subject_learn_type;
-const amount_type = Functions.amount_type;
+const unit_type = Common.unit_type;
+const subject_learn_type_list = Common.subject_learn_type;
+const amount_type = Common.amount_type;
 export default class TeacherLicence extends Component {
   state = {
     ti_id: 0,
@@ -260,15 +260,15 @@ export default class TeacherLicence extends Component {
                     </td>
 
                     <td align="center">
-                      {Functions.unit_type[rs.ti_unit_type - 1]}
+                      {Common.unit_type[rs.ti_unit_type - 1]}
                     </td>
                     <td align="center">
-                      {Functions.amount_type[rs.ti_amount_type - 1]}
+                      {Common.amount_type[rs.ti_amount_type - 1]}
                     </td>
                     <td align="center">
-                      {Functions.subject_learn_type[rs.subject_learn_type - 1]}
+                      {Common.subject_learn_type[rs.subject_learn_type - 1]}
                     </td>
-                    <td>{Functions.vehicle_type[rs.vehicle_type_id - 1]}</td>
+                    <td>{Common.vehicle_type[rs.vehicle_type_id - 1]}</td>
                     <td align="center">
                       <Button
                         variant="warning"

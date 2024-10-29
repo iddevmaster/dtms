@@ -24,7 +24,7 @@ import Common from "../../common";
 import axios from "axios";
 const customSelectStyles = Common.customSelectStyles;
 const school_id = Common.getUserLoginData.school_id;
-const course_group_list = Functions.course_group;
+const course_group_list = Common.course_group;
 export default class Course extends Component {
   state = {
     course_id: "",
@@ -467,8 +467,8 @@ export default class Course extends Component {
                       {rs.course_code}
                     </td>
                     <td>{rs.course_name}</td>
-                    <td>{Functions.course_group[rs.course_group - 1]}</td>
-                    <td>{Functions.vehicle_type[rs.vehicle_type_id - 1]} </td>
+                    <td>{Common.course_group[rs.course_group - 1]}</td>
+                    <td>{Common.vehicle_type[rs.vehicle_type_id - 1]} </td>
                     <td align="center">{rs.course_theory_hour} </td>
                     <td align="center">{rs.course_practice_hour} </td>
                     <td align="center">{rs.course_total_hour} </td>

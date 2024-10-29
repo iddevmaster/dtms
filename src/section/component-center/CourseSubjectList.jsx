@@ -73,13 +73,13 @@ export default class CourseSubjectList extends Component {
                 </td>
                 <td align="center">
                   {
-                    Functions.subject_type[
+                    Common.subject_type[
                       rs.subject_coursewithsubject.subject_type - 1
                     ]
                   }
                 </td>
                 <td align="center">
-                  {Functions.subject_learn_type[rs.subject_learn_type - 1]}
+                  {Common.subject_learn_type[rs.subject_learn_type - 1]}
                 </td>
                 <td align="center">{rs.learn_time}</td>
               </tr>

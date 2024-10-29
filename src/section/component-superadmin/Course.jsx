@@ -19,7 +19,8 @@ import Functions from "../../functions";
 import Common from "../../common";
 import axios from "axios";
 const school_id = Common.getUserLoginData.school_id;
-const course_group_list = Functions.course_group;
+const course_group_list = Common.course_group;
+
 export default class Course extends Component {
   state = {
     course_id: "",
@@ -318,8 +319,8 @@ export default class Course extends Component {
                       {rs.course_code}
                     </td>
                     <td>{rs.course_name}</td>
-                    <td>{Functions.course_group[rs.course_group - 1]}</td>
-                    <td>{Functions.vehicle_type[rs.vehicle_type_id - 1]} </td>
+                    <td>{Common.course_group[rs.course_group - 1] ?? "-Not found-"}</td>
+                    <td>{Common.vehicle_type[rs.vehicle_type_id - 1] ?? "-Not found-"} </td>
                     <td align="center">{rs.course_theory_hour} </td>
                     <td align="center">{rs.course_practice_hour} </td>
                     <td align="center">{rs.course_total_hour} </td>
@@ -495,7 +496,7 @@ export default class Course extends Component {
                     value={course_group}
                   >
                     <option value="">--เลือกข้อมูล--</option>
-                    {course_group_list.map((value, index) => (
+                    {course_group_list?.map((value, index) => (
                       <option value={index + 1} key={index}>
                         {value}
                       </option>

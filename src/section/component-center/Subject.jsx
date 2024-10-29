@@ -208,7 +208,7 @@ export default class Subject extends Component {
       page,
       param,
     } = this.state;
-
+    console.log(data)
     return (
       <div>
         <Row>
@@ -285,11 +285,14 @@ export default class Subject extends Component {
                   <tr key={index}>
                     <td>{rs.subject_code}</td>
                     <td>{rs.subject_name}</td>
-                    <td>{Functions.vehicle_type[rs.vehicle_type_id - 1]}</td>
+                    <td>{rs.vehicle_type_id}</td>
+                    <td>{rs.subject_type}</td>
+                    <td>{rs.subject_learn_type}</td>
+                    {/* <td>{Functions.vehicle_type[rs.vehicle_type_id - 1]}</td>
                     <td>{Functions.subject_type[rs.subject_type - 1]} </td>
                     <td>
                       {Functions.subject_learn_type[rs.subject_learn_type - 1]}
-                    </td>
+                    </td> */}
                     <td>
                       {rs.active === 1 ? (
                         <span style={{ color: "blue" }}>เปิด</span>

@@ -7,6 +7,7 @@ import LoginUser from "../landing-page/LoginUser";
 import Login from "../landing-page/Login";
 import BlankPage from "../section/BlankPage";
 import Common from "../common";
+import LogoutPage from "../section/LogoutPage";
 
 export default class BaseLayout extends Component {
   state = {
@@ -16,7 +17,6 @@ export default class BaseLayout extends Component {
     fullname: "",
   };
   checkAuthen = () => {
-    // console.log(Common.getUserLoginData);
     if (Common.getUserLoginData === null) {
       this.setState({ user_id: "", user_type: 0 });
       localStorage.clear();
@@ -36,28 +36,26 @@ export default class BaseLayout extends Component {
     const { user_type } = this.state;
     const { app_name } = this.state;
     const { fullname } = this.state;
-    return (
-      <div>
-        {user_type === 0 && (
-          <Router>
-            <Routes>
-              <Route path="/:school_id/login" element={<LoginUser />} />
-              <Route
-                path="/staff/z/login"
-                element={<Login app_name={app_name} fullname={fullname} />}
-              />
-              <Route path="*" element={<BlankPage />} />
-            </Routes>
-          </Router>
-        )}
-        {user_type === 1 && (
-          <SectionSuperAdmin app_name={app_name} fullname={fullname} />
-        )}
-
-        {user_type === 2 && (
-          <SectionSchoolAdmin app_name={app_name} fullname={fullname} />
-        )}
-      </div>
-    );
+    console.log(user_type)
+    if (user_type === 0) {
+      return (
+        <Router>
+          <Routes>
+            <Route path="/:school_id/login" element={<LoginUser />} />
+            <Route
+              path="/staff/z/login"
+              element={<Login app_name={app_name} fullname={fullname} />}
+            />
+            <Route path="*" element={<BlankPage />} />
+          </Routes>
+        </Router>
+      );
+    } else if (user_type === 1) {
+      return <SectionSuperAdmin app_name={app_name} fullname={fullname} />;
+    } else if (user_type === 2) {
+      return <SectionSchoolAdmin app_name={app_name} fullname={fullname} />;
+    } else {
+      return <LogoutPage />; // Default fallback for unknown user types
+    }
   }
 }

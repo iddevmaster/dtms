@@ -593,7 +593,7 @@ export default class ExamDate extends Component {
                     <td align="center">{rs.ed_start_time.slice(0, -3)}</td>
                     <td align="center">{rs.ed_end_time.slice(0, -3)}</td>
                     <td align="center">{rs.ed_hour}</td>
-                    <td>{Functions.vehicle_type[rs.vehicle_type_id - 1]}</td>
+                    <td>{Common.vehicle_type[rs.vehicle_type_id - 1]}</td>
                     <td align="center">
                       {rs.ed_ready > 0 && <i className="fa fa-check"></i>}
                     </td>
@@ -819,7 +819,7 @@ export default class ExamDate extends Component {
               <tbody>
                 {data2.map((rs, index) => (
                   <tr key={index}>
-                    <td>{Functions.staff_exam_type[rs.staff_exam_type - 1]}</td>
+                    <td>{Common.staff_exam_type[rs.staff_exam_type - 1]}</td>
                     <td>
                       {rs.teacher_examdate_dt.teacher_firstname}{" "}
                       {rs.teacher_examdate_dt.teacher_lastname}
