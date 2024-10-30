@@ -261,7 +261,7 @@ class StudentUpdate extends Component {
                       {rs.subject_rcs.subject_name}
                     </td>
                     <td align="center">
-                      {Functions.subject_learn_type[rs.subject_learn_type - 1]}
+                      {Common.subject_learn_type[rs.subject_learn_type - 1]}
                     </td>
                     <td align="center">
                       {Functions.format_date_time(rs.rs_start_time)}

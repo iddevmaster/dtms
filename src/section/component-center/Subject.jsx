@@ -288,10 +288,10 @@ export default class Subject extends Component {
                     <td>{rs.vehicle_type_id}</td>
                     <td>{rs.subject_type}</td>
                     <td>{rs.subject_learn_type}</td>
-                    {/* <td>{Functions.vehicle_type[rs.vehicle_type_id - 1]}</td>
-                    <td>{Functions.subject_type[rs.subject_type - 1]} </td>
+                    {/* <td>{Common.vehicle_type[rs.vehicle_type_id - 1]}</td>
+                    <td>{Common.subject_type[rs.subject_type - 1]} </td>
                     <td>
-                      {Functions.subject_learn_type[rs.subject_learn_type - 1]}
+                      {Common.subject_learn_type[rs.subject_learn_type - 1]}
                     </td> */}
                     <td>
                       {rs.active === 1 ? (

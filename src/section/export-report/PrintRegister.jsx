@@ -133,7 +133,7 @@ export default class PrintRegister extends Component {
               <p>
                 ขอสมัครเรียนฝึกหัดขับ{" "}
                 <strong>
-                  {Functions.vehicle_type_format(main.vehicle_type_id)}
+                  {Common.vehicle_type_format(main.vehicle_type_id)}
                 </strong>{" "}
                 หลักสูตร{" "}
                 <strong>

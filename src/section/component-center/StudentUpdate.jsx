@@ -22,7 +22,7 @@ import Select from "react-select";
 import DatePicker from "react-multi-date-picker";
 import thai from "../../asset/multi_datepicker/thai";
 import thai_th from "../../asset/multi_datepicker/thai_th";
-const list_prefix = Functions.prefix;
+const list_prefix = Common.prefix;
 const BASE_IMAGE = Common.IMAGE_URL;
 const school_id = Common.getUserLoginData.school_id;
 const customStyles = {

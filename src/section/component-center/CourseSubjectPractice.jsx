@@ -127,7 +127,7 @@ export default class CourseSubjectPractice extends Component {
                     <td>
                       {rs.subject_code} {rs.subject_name}
                     </td>
-                    <td>{Functions.subject_type[rs.subject_type - 1]}</td>
+                    <td>{Common.subject_type[rs.subject_type - 1]}</td>
                     <td>
                       <Form.Control
                         type="number"

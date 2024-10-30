@@ -84,6 +84,7 @@ class PaymentRegisterForm extends Component {
 
   refreshData = async () => {
     try {
+      console.log("rm_id : ",this.state.rm_id)
       await axios
         .get(
           Common.API_URL + `register/result/core/${this.state.rm_id}`,
