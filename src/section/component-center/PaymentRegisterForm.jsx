@@ -107,10 +107,14 @@ class PaymentRegisterForm extends Component {
             " " +
             student.student_core_location.zipcode;
           // ยอดค้างชำระล่าสุด
-          let price;
+          let price = 0;
+          let dept = 0;
           if (payment.length > 0) {
-            price = payment[0].pr_debt;
+            dept = payment[0].pr_debt;
           } else {
+            dept = res.course_price;
+          }
+          if (res.course_price){
             price = res.course_price;
           }
           // console.log(price);
@@ -125,8 +129,8 @@ class PaymentRegisterForm extends Component {
               student.student_lastname,
             pr_tax_number: res.student.student_id_number,
             pr_address: address,
-            pr_total_amount: price,
-            pr_debt: price,
+            pr_total_amount: dept,
+            pr_debt: dept,
             line: [
               {
                 pl_name:
@@ -138,7 +142,7 @@ class PaymentRegisterForm extends Component {
                 pl_price_sum: price,
               },
             ],
-            pr_total_amount2: price,
+            pr_total_amount2: dept,
           });
         })
         .catch((err) => {
@@ -243,11 +247,12 @@ class PaymentRegisterForm extends Component {
 
   sumAllPrice = () => {
     let sum = 0;
-    const { line } = this.state;
+    const { line, pr_debt } = this.state;
 
     for (let i = 0; i < line.length; i++) {
       let obj = line[i];
-      // console.log(obj);
+      // console.log("obj : ",obj);
+      // console.log("pr_debt : ",pr_debt);
       if (obj !== undefined) {
         sum += parseFloat(obj.pl_price_sum);
       }
@@ -291,9 +296,10 @@ class PaymentRegisterForm extends Component {
   calDiscountPercent = () => {
     const { pr_total_amount2 } = this.state;
     let chkNan;
-    let pr_discount_percent = document.getElementById(
+    let percent_value = document.getElementById(
       "pr_discount_percent"
     ).value;
+    let pr_discount_percent = Math.min(Math.max(percent_value, 0), 100);
     let r =
       ((parseFloat(Functions.valNan(pr_discount_percent)) * 1) / 100) *
       parseFloat(pr_total_amount2); /// เปอร์เซ็นของยอดรวม
@@ -457,7 +463,7 @@ class PaymentRegisterForm extends Component {
               <Table striped>
                 <thead>
                   <tr>
-                    <th>
+                    {/* <th>
                       <Button
                         variant="primary"
                         size="sm"
@@ -465,7 +471,7 @@ class PaymentRegisterForm extends Component {
                       >
                         <i className="fa fa-plus" aria-hidden="true"></i>
                       </Button>
-                    </th>
+                    </th> */}
                     <th>รายการ</th>
                     <th>หน่วย</th>
                     <th>ราคาต่อหน่วย</th>
@@ -475,7 +481,7 @@ class PaymentRegisterForm extends Component {
                 <tbody>
                   {line.map((rs, index) => (
                     <tr key={index}>
-                      <td>
+                      {/* <td>
                         <Button
                           variant="danger"
                           size="sm"
@@ -484,11 +490,12 @@ class PaymentRegisterForm extends Component {
                         >
                           <i className="fa fa-minus" aria-hidden="true"></i>
                         </Button>
-                      </td>
+                      </td> */}
                       <td>
                         <Form.Control
                           type="text"
                           id={`pl_name_${index}`}
+                          readOnly={index === 0 ? true : false}
                           onChange={() => [this.UpdateRowPrice(index)]}
                           value={rs.pl_name}
                           isInvalid
@@ -498,6 +505,7 @@ class PaymentRegisterForm extends Component {
                         <Form.Control
                           type="number"
                           value={rs.pl_unit}
+                          readOnly={index === 0 ? true : false}
                           style={{ textAlign: "right" }}
                           id={`pl_unit_${index}`}
                           onChange={() => [this.calPrice(index)]}
@@ -508,6 +516,7 @@ class PaymentRegisterForm extends Component {
                         <Form.Control
                           type="number"
                           value={rs.pl_price_per_unit}
+                          readOnly={index === 0 ? true : false}
                           style={{ textAlign: "right" }}
                           id={`pl_price_per_unit_${index}`}
                           onChange={() => [this.calPrice(index)]}
@@ -537,6 +546,8 @@ class PaymentRegisterForm extends Component {
                       onChange={this.calDiscountPercent}
                       value={pr_discount_percent}
                       isInvalid
+                      max={100}
+                      min={0}
                     />
                   </Form.Group>
                   <Form.Group>
