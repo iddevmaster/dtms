@@ -16,7 +16,6 @@ import {
 
 import Common from "../../common";
 import axios from "axios";
-import Functions from "../../functions";
 import EmptyImage from "../../asset/images/profile.png";
 import Select from "react-select";
 import DatePicker from "react-multi-date-picker";

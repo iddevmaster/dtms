@@ -4,7 +4,6 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Common from "../../common";
 import axios from "axios";
-import Functions from "../../functions";
 export default class CourseSubjectList extends Component {
   state = {
     course_id: this.props.course_id,

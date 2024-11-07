@@ -247,7 +247,7 @@ class PaymentRegisterForm extends Component {
 
   sumAllPrice = () => {
     let sum = 0;
-    const { line, pr_debt } = this.state;
+    const { line } = this.state;
 
     for (let i = 0; i < line.length; i++) {
       let obj = line[i];

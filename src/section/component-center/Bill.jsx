@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import Table from "react-bootstrap/Table";
 import Card from "react-bootstrap/Card";
