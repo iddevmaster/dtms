@@ -36,7 +36,6 @@ export default class BaseLayout extends Component {
     const { user_type } = this.state;
     const { app_name } = this.state;
     const { fullname } = this.state;
-    console.log(user_type)
     if (user_type === 0) {
       return (
         <Router>

@@ -105,7 +105,7 @@ class CourseSubject extends Component {
           <div>
             <h5>
               ประเภทยานพาหนะ :{" "}
-              {Common.vehicle_type_format(data.vehicle_type_id)} | ทฤษฏี :{" "}
+              {Functions.vehicle_type_format(data.vehicle_type_id)} | ทฤษฏี :{" "}
               {data.course_theory_hour} ชั่วโมง | ปฏิบัติ :{" "}
               {data.course_practice_hour} ชั่วโมง
             </h5>

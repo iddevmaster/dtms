@@ -42,6 +42,7 @@ export default class CourseSeminarForm extends Component {
       label: "สาขา",
     },
   };
+
   clearState = async () => {
     await new Promise((accept) =>
       this.setState(
@@ -56,6 +57,7 @@ export default class CourseSeminarForm extends Component {
       )
     );
   };
+
   setSubjectid = async (subject_id) => {
     await new Promise((accept) =>
       this.setState(
@@ -114,7 +116,6 @@ export default class CourseSeminarForm extends Component {
     const { seminar_start_time } = this.state;
     const { seminar_end_time } = this.state;
     const { seminar_date_Obj } = this.state;
-
     const { teacher_id } = this.state;
     this.useData(
       subject_id,
@@ -124,6 +125,7 @@ export default class CourseSeminarForm extends Component {
       seminar_date_Obj
     );
   };
+
   useData = async (
     subject_id,
     teacher_id,
@@ -132,23 +134,31 @@ export default class CourseSeminarForm extends Component {
     seminar_date_Obj
   ) => {
     const { setPost } = this.state;
-    // Delete subject_id ก่อนหน้านี้ออก
-    var filtered = setPost.filter(function (item) {
-      return item.subject_id !== subject_id;
-    });
-    const arr = {
-      seminar_start_time: seminar_start_time,
-      seminar_end_time: seminar_end_time,
-      subject_id: subject_id,
-      course_id: this.state.course_id,
-      teacher_id: teacher_id,
-      branch_id: this.state.branch_id,
-      school_id: school_id,
-      seminar_date_Obj: seminar_date_Obj,
-    };
-    filtered.push(arr);
-
-    // console.log(JSON.stringify(filtered));
+    var filtered = [...setPost];
+    const postExists = filtered.some(post => post.subject_id === subject_id);
+    if (postExists) {
+      filtered = filtered.map(post => 
+        post.subject_id === subject_id ? {
+            ...post,
+            seminar_start_time: seminar_start_time ? seminar_start_time : post.seminar_start_time,
+            seminar_end_time: seminar_end_time ? seminar_end_time : post.seminar_end_time,
+            teacher_id: teacher_id ? teacher_id : post.teacher_id,
+            seminar_date_Obj: seminar_date_Obj ? seminar_date_Obj : post.seminar_date_Obj,
+        } : post
+      );
+    } else {
+      const arr = {
+        seminar_start_time,
+        seminar_end_time,
+        subject_id,
+        course_id: this.state.course_id,
+        teacher_id,
+        branch_id: this.state.branch_id,
+        school_id,
+        seminar_date_Obj,
+      };
+      filtered.push(arr);
+    }
     await new Promise((accept) =>
       this.setState(
         {
@@ -157,6 +167,8 @@ export default class CourseSeminarForm extends Component {
         accept
       )
     );
+    // console.log("useData : ", filtered)
+    await this.clearState();
   };
 
   refreshData = async () => {
@@ -312,6 +324,7 @@ export default class CourseSeminarForm extends Component {
       return false;
     }
     try {
+      // console.log("Post data : ", this.state.setPost)
       axios
         .post(
           Common.API_URL + "course/seminar/create_multiple",
@@ -332,11 +345,12 @@ export default class CourseSeminarForm extends Component {
   };
 
   TimeAdd = async (time_id, hour_value, result_id, subject_id_value) => {
+    // console.log("Befor : ", time_id, hour_value, result_id, subject_id_value)
     const subject_id = subject_id_value;
     var t = document.getElementById(time_id).value;
 
     var r = Functions.add_hour(t, hour_value);
-    // console.log(r);
+    // console.log("r : ", r , " t : ", t);
 
     await new Promise((accept) =>
       this.setState(
@@ -348,7 +362,6 @@ export default class CourseSeminarForm extends Component {
         accept
       )
     );
-
     this.prepare();
     document.getElementById(result_id).innerHTML = r.slice(0, -3);
   };
@@ -362,7 +375,6 @@ export default class CourseSeminarForm extends Component {
   render() {
     const { data } = this.state;
     const { teacherObj } = this.state;
-
     const { isOpenModal } = this.state;
     const { setPost } = this.state;
     const { defaultBranch } = this.state;
@@ -409,6 +421,7 @@ export default class CourseSeminarForm extends Component {
                   .filter((x) => x.subject_learn_type === 1)
                   .map((rs, index) => (
                     <tr key={index}>
+                      {/* # */}
                       <td>
                         <Form.Check
                           type="switch"
@@ -419,10 +432,12 @@ export default class CourseSeminarForm extends Component {
                           ]}
                         />
                       </td>
+                      {/* รายวิชา */}
                       <td>
                         {rs.subject_coursewithsubject.subject_code}{" "}
                         {rs.subject_coursewithsubject.subject_name}
                       </td>
+                      {/* ครู */}
                       <td>
                         <Form.Select
                           onChange={(e) =>
@@ -441,6 +456,7 @@ export default class CourseSeminarForm extends Component {
                             ))}
                         </Form.Select>
                       </td>
+                      {/* เวลาเริ่ม */}
                       <td>
                         <Form.Select
                           onChange={() =>
@@ -462,15 +478,17 @@ export default class CourseSeminarForm extends Component {
                           ))}
                         </Form.Select>
                       </td>
+                      {/* ชั่วโมงเรียน */}
                       <td align="center">
                         <h4 style={{ color: "blue" }}>{rs.learn_time}</h4>
                       </td>
+                      {/* เวลาสิ้นสุด */}
                       <td align="center">
                         <h4 style={{ color: "red" }}>
                           <span id={`rhour_${index}`}>00:00</span>
                         </h4>
                       </td>
-
+                      {/* ปฏิทิน */}
                       <td>
                         <DatePicker
                           multiple
