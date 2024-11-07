@@ -279,7 +279,7 @@ export default class TeacherLicence extends Component {
                     <td>{Functions.ymdtodmy(rs.tl_date_of_expiry_staff)}</td>
                     <td>{Functions.ymdtodmy(rs.tl_date_of_issue)}</td>
                     <td>{Functions.ymdtodmy(rs.tl_date_of_expiry)}</td>
-                    <td>{Common.vehicle_type_format(rs.vehicle_type_id)}</td>
+                    <td>{Functions.vehicle_type_format(rs.vehicle_type_id)}</td>
                     <td align="center">
                       <Button
                         variant="warning"
