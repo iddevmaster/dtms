@@ -285,14 +285,11 @@ export default class Subject extends Component {
                   <tr key={index}>
                     <td>{rs.subject_code}</td>
                     <td>{rs.subject_name}</td>
-                    <td>{rs.vehicle_type_id}</td>
-                    <td>{rs.subject_type}</td>
-                    <td>{rs.subject_learn_type}</td>
-                    {/* <td>{Common.vehicle_type[rs.vehicle_type_id - 1]}</td>
+                    <td>{Common.vehicle_type[rs.vehicle_type_id - 1]}</td>
                     <td>{Common.subject_type[rs.subject_type - 1]} </td>
                     <td>
                       {Common.subject_learn_type[rs.subject_learn_type - 1]}
-                    </td> */}
+                    </td>
                     <td>
                       {rs.active === 1 ? (
                         <span style={{ color: "blue" }}>เปิด</span>
