@@ -64,13 +64,13 @@ export default class SectionSchoolAdmin extends Component {
                   <NavDropdown.Item href="/teacher">
                     ทะเบียนครู
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="#">วันหยุดครู</NavDropdown.Item>
+                  <NavDropdown.Item href="#" disabled>วันหยุดครู</NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown title="การเงิน" id="collasible-nav-dropdown">
                   <NavDropdown.Item href="/register">
                     ชำระเงินค่าสมัครเรียน
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="/register">
+                  <NavDropdown.Item href="/register" disabled>
                     บันทึกการจ่ายครูฝึก
                   </NavDropdown.Item>
                 </NavDropdown>
@@ -89,7 +89,7 @@ export default class SectionSchoolAdmin extends Component {
                   </NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown title="ข้อมูลทั่วไป" id="collasible-nav-dropdown">
-                  <NavDropdown.Item href="#">โรงเรียน</NavDropdown.Item>
+                  <NavDropdown.Item href="#" disabled>โรงเรียน</NavDropdown.Item>
                   <NavDropdown.Item href="/vehicle">ยานพาหนะ</NavDropdown.Item>
                   <NavDropdown.Item href="/branch">สาขา</NavDropdown.Item>
                   <NavDropdown.Item href="/user">ผู้ใช้งาน</NavDropdown.Item>

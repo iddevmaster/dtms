@@ -13,6 +13,7 @@ import {
   Modal,
   Table,
   Alert,
+  Container,
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Functions from "../../functions";
@@ -452,148 +453,168 @@ export default class Teacher extends Component {
         </Card>
 
         {/* Form Teacher */}
-        <Modal show={isOpenModal}>
+        <Modal show={isOpenModal} size="lg">
           <Modal.Header>
             <Modal.Title>ทะเบียนครู</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {/* show error */}
             {msg !== "" && <Alert variant="danger">{msg}</Alert>}
 
-            <Form.Group className="mb-3">
-              <Form.Label>เลขบัตรประจำตัวประชาชน</Form.Label>
-              <label style={{ color: "red" }}> *</label>
-              <Form.Control
-                type="text"
-                required
-                onChange={(e) =>
-                  this.setState({ teacher_id_number: e.target.value })
-                }
-                defaultValue={teacher_id_number}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>คำนำหน้า</Form.Label>
-              <label style={{ color: "red" }}> *</label>
-              <InputGroup>
-                <DropdownButton
-                  variant="outline-secondary"
-                  title="เลือกคำนำหน้า"
-                  id="input-group-dropdown-1"
-                >
-                  {list_prefix.map((value, index) => (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={(e) => this.setState({ teacher_prefix: value })}
-                    >
-                      {value}
-                    </Dropdown.Item>
-                  ))}
-                </DropdownButton>
+            <Container>
+              <Form.Group className="mb-3">
+                <Form.Label>เลขบัตรประจำตัวประชาชน</Form.Label>
+                <label style={{ color: "red" }}> *</label>
                 <Form.Control
-                  id="teacher_prefix"
-                  value={teacher_prefix}
+                  type="text"
+                  required
                   onChange={(e) =>
-                    this.setState({ teacher_prefix: e.target.value })
+                    this.setState({ teacher_id_number: e.target.value })
                   }
+                  defaultValue={teacher_id_number}
                 />
-              </InputGroup>
-            </Form.Group>
+              </Form.Group>
+              <Row>
+                <Col>
+                <Form.Group className="mb-3">
+                <Form.Label>คำนำหน้า</Form.Label>
+                <label style={{ color: "red" }}> *</label>
+                <InputGroup>
+                  <DropdownButton
+                    variant="outline-secondary"
+                    title="เลือกคำนำหน้า"
+                    id="input-group-dropdown-1"
+                  >
+                    {list_prefix.map((value, index) => (
+                      <Dropdown.Item
+                        key={index}
+                        onClick={(e) =>
+                          this.setState({ teacher_prefix: value })
+                        }
+                      >
+                        {value}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                  <Form.Control
+                    id="teacher_prefix"
+                    value={teacher_prefix}
+                    onChange={(e) =>
+                      this.setState({ teacher_prefix: e.target.value })
+                    }
+                  />
+                </InputGroup>
+              </Form.Group>
+                </Col>
+                <Col>
+                <Form.Group className="mb-3">
+                <Form.Label>เพศ</Form.Label>
+                <Form.Select
+                  onChange={(e) =>
+                    this.setState({ teacher_gender: e.target.value })
+                  }
+                  defaultValue={teacher_gender}
+                  id="teacher_gender"
+                >
+                  <option value="">--เลือกเพศ--</option>
+                  <option value="1">ชาย</option>
+                  <option value="2">หญิง</option>
+                </Form.Select>
+              </Form.Group>
+                </Col>
+              </Row>
 
-            <Form.Group className="mb-3">
-              <Form.Label>ชื่อ</Form.Label>
-              <label style={{ color: "red" }}> *</label>
-              <Form.Control
-                type="text"
-                required
-                onChange={(e) =>
-                  this.setState({ teacher_firstname: e.target.value })
-                }
-                defaultValue={teacher_firstname}
-                id="teacher_firstname"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>นามสกุล</Form.Label>
-              <label style={{ color: "red" }}> *</label>
-              <Form.Control
-                type="text"
-                required
-                onChange={(e) =>
-                  this.setState({ teacher_lastname: e.target.value })
-                }
-                defaultValue={teacher_lastname}
-                id="teacher_lastname"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>เพศ</Form.Label>
-              <Form.Select
-                onChange={(e) =>
-                  this.setState({ teacher_gender: e.target.value })
-                }
-                defaultValue={teacher_gender}
-                id="teacher_gender"
-              >
-                <option value="">--เลือกเพศ--</option>
-                <option value="1">ชาย</option>
-                <option value="2">หญิง</option>
-              </Form.Select>
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>ชื่อ</Form.Label>
+                <label style={{ color: "red" }}> *</label>
+                <Form.Control
+                  type="text"
+                  required
+                  onChange={(e) =>
+                    this.setState({ teacher_firstname: e.target.value })
+                  }
+                  defaultValue={teacher_firstname}
+                  id="teacher_firstname"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>นามสกุล</Form.Label>
+                <label style={{ color: "red" }}> *</label>
+                <Form.Control
+                  type="text"
+                  required
+                  onChange={(e) =>
+                    this.setState({ teacher_lastname: e.target.value })
+                  }
+                  defaultValue={teacher_lastname}
+                  id="teacher_lastname"
+                />
+              </Form.Group>
+              
 
-            <Form.Group className="mb-3">
-              <Form.Label>เบอร์โทร</Form.Label>
-              <label style={{ color: "red" }}> *</label>
-              <Form.Control
-                type="text"
-                required
-                onChange={(e) =>
-                  this.setState({ teacher_phone: e.target.value })
-                }
-                defaultValue={teacher_phone}
-                id="teacher_phone"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>อีเมล</Form.Label>
-              <Form.Control
-                type="text"
-                required
-                onChange={(e) =>
-                  this.setState({ teacher_email: e.target.value })
-                }
-                defaultValue={teacher_email}
-                id="teacher_email"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>สาขา</Form.Label>
-              <label style={{ color: "red" }}> *</label>
-              <Form.Select
-                onChange={(e) => this.setState({ branch_id: e.target.value })}
-                defaultValue={branch_id}
-                id="branch_id"
-              >
-                <option value="">--เลือกสาขา--</option>
-                {branch
-                  .filter((x) => x.active === 1)
-                  .map((rs, index) => (
-                    <option value={rs.branch_id} key={index}>
-                      {rs.branch_name}
-                    </option>
-                  ))}
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>เปิด - ปิด</Form.Label>
-              <Form.Select
-                onChange={(e) => this.setState({ active: e.target.value })}
-                defaultValue={active}
-                id="active"
-              >
-                <option value="0">ปิด</option>
-                <option value="1">เปิด</option>
-              </Form.Select>
-            </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>เบอร์โทร</Form.Label>
+                <label style={{ color: "red" }}> *</label>
+                <Form.Control
+                  type="text"
+                  required
+                  onChange={(e) =>
+                    this.setState({ teacher_phone: e.target.value })
+                  }
+                  defaultValue={teacher_phone}
+                  id="teacher_phone"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>อีเมล</Form.Label>
+                <Form.Control
+                  type="text"
+                  required
+                  onChange={(e) =>
+                    this.setState({ teacher_email: e.target.value })
+                  }
+                  defaultValue={teacher_email}
+                  id="teacher_email"
+                />
+              </Form.Group>
+              <Row>
+                <Col>
+                <Form.Group className="mb-3">
+                <Form.Label>สาขา</Form.Label>
+                <label style={{ color: "red" }}> *</label>
+                <Form.Select
+                  onChange={(e) => this.setState({ branch_id: e.target.value })}
+                  defaultValue={branch_id}
+                  id="branch_id"
+                >
+                  <option value="">--เลือกสาขา--</option>
+                  {branch
+                    .filter((x) => x.active === 1)
+                    .map((rs, index) => (
+                      <option value={rs.branch_id} key={index}>
+                        {rs.branch_name}
+                      </option>
+                    ))}
+                </Form.Select>
+              </Form.Group>
+                </Col>
+                <Col>
+                <Form.Group className="mb-3">
+                <Form.Label>เปิด - ปิด</Form.Label>
+                <Form.Select
+                  onChange={(e) => this.setState({ active: e.target.value })}
+                  defaultValue={active}
+                  id="active"
+                >
+                  <option value="0">ปิด</option>
+                  <option value="1">เปิด</option>
+                </Form.Select>
+              </Form.Group>
+                </Col>
+              </Row>
+              
+              
+            </Container>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={this.cancleForm}>

@@ -109,11 +109,12 @@ export default class RegisterAddStudent extends Component {
         .get(Common.API_URL + `register/student_tmp/${rm_id}`, Common.options)
         .then((response) => {
           let res = response.data;
+          // console.log("student_tmp : ", res)
           let student = res;
           let location = res.student_tmp_location;
           let country = res.country_id[0];
           let nationality = res.nationality_id[0];
-          // console.log(student);
+          console.log("student : ",student);
           let label =
             location.district_name +
             " - " +
@@ -170,11 +171,11 @@ export default class RegisterAddStudent extends Component {
           );
         });
     } catch (error) {
-      console.log(error);
+      console.error(`Fetch "register/student_tmp/${rm_id}" error`);
     }
   };
 
-  getLocation = (newValue) => {
+  getLocation = (newValue = "") => {
     // console.log(inputValue);
     try {
       axios
@@ -605,6 +606,9 @@ export default class RegisterAddStudent extends Component {
 
   componentDidMount() {
     this.refrehData();
+    this.getLocation();
+    this.getCountry();
+    this.getNationality();
   }
   render() {
     const { list_location } = this.state;
@@ -628,6 +632,7 @@ export default class RegisterAddStudent extends Component {
     const { defaultLocation } = this.state;
     const { defaultCountry } = this.state;
     const { defaultNationality } = this.state;
+
     // const { data_idcard } = this.state;
     return (
       <div>

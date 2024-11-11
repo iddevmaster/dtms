@@ -98,7 +98,8 @@ export default class Register extends Component {
 
   checkDataRegister = async () => {
     try {
-      await axios
+      if (rm_id) {
+        await axios
         .get(Common.API_URL + `register/check/${rm_id}`, Common.options)
         .then((response) => {
           let res = response.data;
@@ -120,7 +121,8 @@ export default class Register extends Component {
           if (String(crtdate).split("T")[0] !== presentday) {
             this.default();
           }
-        });
+        }); 
+      }
     } catch (error) {
       // console.log(setMainRegister.rm_id);
       if (setMainRegister.rm_id !== "") {

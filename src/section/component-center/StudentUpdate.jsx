@@ -514,6 +514,9 @@ class StudentUpdate extends Component {
 
   componentDidMount() {
     this.refrehData();
+    this.getCountry();
+    this.getLocation();
+    this.getNationality();
   }
   render() {
     const {

@@ -83,7 +83,8 @@ class LoginUser extends Component {
       <div>
         <div className="wrapper">
           <div className="form-signin">
-            <h2 className="form-signin-heading">{school_name} </h2>
+            <h2 className="form-signin-heading text-center">{app_name} </h2>
+            <h4 className="form-signin-heading text-center">{school_name} </h4>
 
             <div className="inner-addon">
               {msg !== "" && <Alert variant="danger">{msg}</Alert>}
@@ -115,7 +116,6 @@ class LoginUser extends Component {
               </button>
             </div>
           </div>
-          <div align="center"> {app_name} </div>
         </div>
       </div>
     );

@@ -364,7 +364,9 @@ export default class User extends Component {
                 </tr>
               </thead>
               <tbody>
-                {data.map((rs, index) => (
+                {data
+                .filter(item => item.user_type !== 5)
+                .map((rs, index) => (
                   <tr key={index}>
                     <td>{rs.username}</td>
                     <td>
