@@ -519,6 +519,8 @@ export default class Register extends Component {
   }
   componentDidUpdate() {
     // this.getTeacher();
+    this.getBranch();
+    this.getCourse();
   }
 
   render() {
