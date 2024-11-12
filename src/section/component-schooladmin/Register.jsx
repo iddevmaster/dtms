@@ -484,8 +484,8 @@ export default class Register extends Component {
   };
 
   componentDidMount() {
-    this.getCourse("");
-    this.getBranch("");
+    this.getCourse();
+    this.getBranch();
     this.checkDataRegister();
     if (setMainRegister.teacher_id !== "") {
       this.getTeacherByid(setMainRegister.teacher_id);
@@ -519,8 +519,6 @@ export default class Register extends Component {
   }
   componentDidUpdate() {
     // this.getTeacher();
-    this.getBranch();
-    this.getCourse();
   }
 
   render() {
